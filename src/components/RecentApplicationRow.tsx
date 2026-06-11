@@ -32,14 +32,14 @@ export default function RecentApplicationRow({ application }: RecentApplicationR
 
   return (
     <div className="flex flex-col gap-4 py-4 first:pt-0 last:pb-0 md:flex-row md:items-center md:justify-between">
-      <div className="flex min-w-0 items-center gap-3">
-        <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-sm font-semibold text-white ${avatarColor}`}>
+      <div className="flex min-w-0 items-center gap-3.5">
+        <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-sm font-semibold tracking-tight text-white ${avatarColor}`}>
           {initial}
         </div>
 
         <div className="min-w-0">
-          <p className="truncate text-sm font-semibold text-slate-900">{application.company}</p>
-          <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500">
+          <p className="truncate text-[15px] font-semibold tracking-tight text-slate-900">{application.company}</p>
+          <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-slate-500">
             <span className="font-medium text-slate-700">{application.role}</span>
             <span className="text-slate-300">/</span>
             <span>{application.location}</span>
@@ -48,12 +48,10 @@ export default function RecentApplicationRow({ application }: RecentApplicationR
       </div>
 
       <div className="flex items-center justify-between gap-4 md:justify-end">
-        <span
-          className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ring-1 ${statusBadgeClasses[application.status]}`}
-        >
+        <span className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ring-1 ${statusBadgeClasses[application.status]}`}>
           {application.status}
         </span>
-        <span className="min-w-24 text-xs font-medium text-slate-500">
+        <span className="min-w-24 text-[13px] font-medium text-slate-500">
           {new Date(application.dateApplied).toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",
