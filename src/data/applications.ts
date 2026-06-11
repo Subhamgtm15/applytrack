@@ -25,7 +25,7 @@ const applications: Application[] = [
     jobType: "full-time",
     status: "interview",
     dateApplied: "2026-05-14",
-    followUpDate: "2026-05-21",
+    followUpDate: "",
     salary: "$140k-$170k",
     source: "Referral",
     notes: "Strong recruiter screen, waiting for technical round.",

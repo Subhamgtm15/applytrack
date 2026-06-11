@@ -1,6 +1,6 @@
 import { Eye, MapPin, Pencil, Trash2 } from "lucide-react";
 import type { Application } from "../data/applications";
-
+import {useState} from "react";
 type ApplicationTableRowProps = {
   application: Application;
 };
@@ -11,7 +11,9 @@ const statusBadgeClasses: Record<Application["status"], string> = {
   offer: "bg-emerald-50 text-emerald-600 ring-emerald-100",
   rejected: "bg-red-50 text-red-600 ring-red-100",
   "follow-up": "bg-amber-50 text-amber-600 ring-amber-100",
-};
+}; 
+// this means object has keys of type Application["status"] (which is a union of the possible status values) and values of type string (the CSS classes for each status badge). 
+//console.log(typeof statusBadgeClasses);  // this will log "object" to the console, 
 
 const avatarColors = [
   "bg-indigo-500",
@@ -30,22 +32,24 @@ function getAvatarColor(company: string) {
     .reduce((total, char) => total + char.charCodeAt(0), 0) % avatarColors.length;
 
   return avatarColors[colorIndex];
-}
+} // simple hash function to get a consistent color index based on company name.
 
 function formatShortDate(date?: string) {
   if (!date) {
     return "-";
-  }
+  }// if date is undefined or null, return a dash to indicate no date available.
+
 
   return new Date(date).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
-  });
+  });  // formats the date to a shorter format like "Sep 15". If date is valid, it will return the formatted date string. If date is invalid, it will return "Invalid Date".
 }
 
 export default function ApplicationTableRow({ application }: ApplicationTableRowProps) {
   const avatarColor = getAvatarColor(application.company);
   const companyInitial = application.company.slice(0, 1).toUpperCase();
+
 
   return (
     <div className="grid gap-4 px-6 py-5 lg:grid-cols-[2.2fr_1.8fr_1.2fr_1.6fr_1fr_1fr_96px] lg:items-center">
