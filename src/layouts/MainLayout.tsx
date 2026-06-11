@@ -1,21 +1,37 @@
+import { useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import Navbar from './Navbar'
 import Sidebar from './Sidebar'
 
 export function MainLayout() {
-    return (
-        <div className="flex min-h-scree text-slate-900">
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
-            <aside className="fixed left-0 top-0 h-screen w-64 border-r border-slate-200 bg-gray-800 text-white hidden lg:block">
+    return (
+        <div className="min-h-screen bg-slate-100 text-slate-900">
+
+            <aside className="fixed left-0 top-0 hidden h-screen w-72 border-r border-slate-200 bg-white lg:block">
                 <Sidebar />
             </aside>
 
-            <div className="ml-64 flex min-h-screen flex-1 flex-col">
+            {isSidebarOpen ? (
+                <>
+                    <button
+                        className="fixed inset-0 z-40 bg-slate-900/30 lg:hidden"
+                        onClick={() => setIsSidebarOpen(false)}
+                        aria-label="Close sidebar"
+                    />
+                    <aside className="fixed left-0 top-0 z-50 h-screen w-72 border-r border-slate-200 bg-white lg:hidden">
+                        <Sidebar onNavigate={() => setIsSidebarOpen(false)} />
+                    </aside>
+                </>
+            ) : null}
 
-                <Navbar />
+            <div className="lg:ml-72 flex min-h-screen flex-1 flex-col">
 
-                <main className="flex-1 mt-16 md:p-4 ">
-                    <div className="mx-auto w-full  rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+                <Navbar onOpenSidebar={() => setIsSidebarOpen(true)} />
+
+                <main className="flex-1 px-4 pb-4 pt-24 md:px-6 md:pb-6 md:pt-24">
+                    <div className="mx-auto w-full rounded-4xl border border-slate-200/80 bg-white/70 p-6 shadow-sm backdrop-blur-sm md:p-8">
                         <Outlet />
                     </div>
                 </main>
