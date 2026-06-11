@@ -1,9 +1,47 @@
 import applications from "../data/applications";
+import RecentApplicationRow from "../components/RecentApplicationRow";
 import StatCard from "../components/StatCard";
 import Upcoming from "../components/upcoming";
-import { BadgeCheck, BriefcaseBusiness, Clock3, CircleX, Handshake } from "lucide-react";
+import { BadgeCheck, BriefcaseBusiness, ChevronRight, Clock3, CircleX, Handshake } from "lucide-react";
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Link } from "react-router-dom";
 export default function AddApplication() {
+  const endOfCurrentWeek = new Date();
+  endOfCurrentWeek.setHours(0, 0, 0, 0); //Remove Time Part
 
+  const weeklyInterviewActivity = Array.from({ length: 6 }, (_, index) => { // _ is a common convention to indicate that we don't care about the first argument (the value) when creating an array with Array.from. We only care about the index, which we use to calculate the week range.
+
+    // we create an array of 6 weeks (current week + previous 5 weeks) and map over it to calculate the interview count for each week.
+    const weekEnd = new Date(endOfCurrentWeek); //
+    weekEnd.setDate(endOfCurrentWeek.getDate() - (5 - index) * 7); // calculate the end date for each week by subtracting the appropriate number of days from the end of the current week. For index 0, we subtract 35 days (5 weeks), for index 1 we subtract 28 days (4 weeks), and so on until index 5 which is the current week with no subtraction.
+
+    const weekStart = new Date(weekEnd);
+    weekStart.setDate(weekEnd.getDate() - 6);  // calculate the start date for each week by subtracting 6 days from the end date of the week. This gives us a 7-day range for each week (weekStart to weekEnd).
+
+
+    const count = applications.filter((app) => {
+      if (app.status !== "interview") {
+        return false;
+      }
+
+      const appliedDate = new Date(`${app.dateApplied}T00:00:00`);
+      return appliedDate >= weekStart && appliedDate <= weekEnd;
+    }).length; // For each of the last 6 weeks, we calculate that week's start and end dates, then scan all applications and count how many interview applications fall within that week's date range.
+
+    return {
+      weekKey: `${weekStart.toISOString().slice(0, 10)}-${weekEnd.toISOString().slice(0, 10)}`,
+      label: weekEnd.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+      rangeLabel: `${weekStart.toLocaleDateString("en-US", { month: "short", day: "numeric" })} - ${weekEnd.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`,
+      count,
+      isCurrentWeek: index === 5,
+    };
+  });
+
+  const recentApplications = [...applications]
+    .sort((firstApp, secondApp) => {
+      return new Date(secondApp.dateApplied).getTime() - new Date(firstApp.dateApplied).getTime();
+    })
+    .slice(0, 5);
   // const interviewCount = applications.filter((app) => {
   //   return app.status === "interview"
   // }).length;
@@ -33,6 +71,7 @@ export default function AddApplication() {
       "follow-up": 0,
     } as Record<string, number>
   );//we loop through the array 5 separate times. reduce lets you summarize everything in one pass.
+
 
   //now for upcoming interviews, we can filter the applications to find those with status "interview" and a followUpDate.
 
@@ -66,7 +105,7 @@ export default function AddApplication() {
 
   // take only top 3
   const upcomingInterviews = sortedUpcoming.slice(0, 3);
-  console.log(upcomingInterviews);
+  // console.log(upcomingInterviews);
   return (
     <section id="center ">
 
@@ -80,8 +119,51 @@ export default function AddApplication() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-6">
 
         {/* LEFT: Application Activity */}
-        <div className="lg:col-span-2  rounded-lg p-4 bg-white">
-          app act
+        <div className="lg:col-span-2 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="mb-6 flex items-start justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-semibold text-slate-900">Application Activity</h2>
+              <p className="text-sm text-slate-500">Interview applications grouped by week using the dateApplied field</p>
+            </div>
+            <div className="rounded-full bg-purple-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-purple-700">
+              Week wise
+            </div>
+          </div>
+
+          {/* bar chart showing the count of interview applications for each of the last 6 weeks, using the weeklyInterviewActivity data we calculated */}
+
+          <div className="rounded-2xl bg-slate-50 p-4">
+            <div className="h-72 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={weeklyInterviewActivity} margin={{ top: 12, right: 12, left: -20, bottom: 8 }}>
+                  <CartesianGrid vertical={false} stroke="#e2e8f0" strokeDasharray="3 3" />
+                  <XAxis
+                    dataKey="label"
+                    tickLine={false}
+                    axisLine={false}
+                    tick={{ fill: "#64748b", fontSize: 12 }}
+                  />
+                  <YAxis
+                    allowDecimals={false}
+                    tickLine={false}
+                    axisLine={false}
+                    tick={{ fill: "#94a3b8", fontSize: 12 }}
+                  />
+                  <Tooltip
+                    cursor={{ fill: "rgba(124, 58, 237, 0.08)" }}
+                    contentStyle={{
+                      borderRadius: "16px",
+                      border: "1px solid #e2e8f0",
+                      boxShadow: "0 8px 24px rgba(15, 23, 42, 0.08)",
+                    }}
+                    formatter={(value) => [`${value ?? 0} interviews`, "Count"]}
+                    labelFormatter={(_, payload) => payload?.[0]?.payload?.rangeLabel ?? ""}
+                  />
+                  <Bar dataKey="count" fill="#8b5cf6" radius={[14, 14, 0, 0]} maxBarSize={44} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
         </div>
 
         {/* RIGHT: Upcoming */}
@@ -107,8 +189,30 @@ export default function AddApplication() {
               ))
             )}
           </div>
-</div>
         </div>
+      </div>
+      {/* // Recent Applications List */}
+      <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="mb-5 flex items-center justify-between gap-4">
+          <div>
+            <h2 className="text-lg font-semibold text-slate-900">Recent Applications</h2>
+            <p className="text-sm text-slate-500">Newest applications first, sorted by the dateApplied field</p>
+          </div>
+          <Link
+            to="/applications"
+            className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+          >
+            View all
+            <ChevronRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="divide-y divide-slate-100">
+          {recentApplications.map((app) => (
+            <RecentApplicationRow key={app.id} application={app} />
+          ))}
+        </div>
+      </div>
     </section>
   );
 }
