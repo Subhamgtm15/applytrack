@@ -99,7 +99,7 @@ export default function Applications() {
               <option value="remote">Remote</option>
               <option value="contract">Contract</option>
               <option value="freelance">Freelance</option>
-            </select> 
+            </select>
           </label>
 
           <label className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-600 transition hover:border-slate-300">

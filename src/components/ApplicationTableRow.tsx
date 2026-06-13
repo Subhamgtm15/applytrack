@@ -1,6 +1,6 @@
 import { Eye, MapPin, Pencil, Trash2 } from "lucide-react";
 import type { Application } from "../data/applications";
-import {useState} from "react";
+import { useState } from "react";
 type ApplicationTableRowProps = {
   application: Application;
 };
@@ -11,7 +11,7 @@ const statusBadgeClasses: Record<Application["status"], string> = {
   offer: "bg-emerald-50 text-emerald-600 ring-emerald-100",
   rejected: "bg-red-50 text-red-600 ring-red-100",
   "follow-up": "bg-amber-50 text-amber-600 ring-amber-100",
-}; 
+};
 // this means object has keys of type Application["status"] (which is a union of the possible status values) and values of type string (the CSS classes for each status badge). 
 //console.log(typeof statusBadgeClasses);  // this will log "object" to the console, 
 
