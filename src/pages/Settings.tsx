@@ -1,9 +1,129 @@
-export default function AddApplication() {
+import { useState } from "react";
+import type { userData } from "../data/userData";
+
+export default function Settings() {
+  const [formData, setFormData] = useState<userData>({
+    firstName: "Alex",
+    lastName: "Morgan",
+    email: "alex@example.com",
+    currentRole: "Frontend Engineer",
+    targetRole: "Staff / Principal Engineer",
+    linkedin: "linkedin.com/in/alexmorgan",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSave = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("Saved profile:", formData);
+  };
+
   return (
-    <>
-      <section id="center">
-        <h1 className="h-1.5 text-8xl font-extrabold">Settings</h1>
-      </section>
-    </>
-  )
+    <form
+      onSubmit={handleSave}
+      className="mx-auto max-w-4xl space-y-8 rounded-2xl bg-white p-8 shadow-sm"
+    >
+      {/* Header */}
+      <div>
+        <h1 className="text-2xl font-bold text-slate-900">Settings</h1>
+        <p className="text-sm text-slate-500">
+          Manage your account and preferences.
+        </p>
+      </div>
+
+      {/* Profile Form */}
+      <div className="grid gap-5 md:grid-cols-2">
+        <div>
+          <label className="text-sm font-medium text-slate-700">
+            First Name
+          </label>
+          <input
+            name="firstName"
+            value={formData.firstName}
+            onChange={handleChange}
+            className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500"
+          />
+        </div>
+
+        <div>
+          <label className="text-sm font-medium text-slate-700">
+            Last Name
+          </label>
+          <input
+            name="lastName"
+            value={formData.lastName}
+            onChange={handleChange}
+            className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500"
+          />
+        </div>
+
+        <div>
+          <label className="text-sm font-medium text-slate-700">
+            Email
+          </label>
+          <input
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500"
+          />
+        </div>
+
+        <div>
+          <label className="text-sm font-medium text-slate-700">
+            Current Role
+          </label>
+          <input
+            name="currentRole"
+            value={formData.currentRole}
+            onChange={handleChange}
+            className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500"
+          />
+        </div>
+
+        <div>
+          <label className="text-sm font-medium text-slate-700">
+            Target Role
+          </label>
+          <input
+            name="targetRole"
+            value={formData.targetRole}
+            onChange={handleChange}
+            className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500"
+          />
+        </div>
+
+        <div>
+          <label className="text-sm font-medium text-slate-700">
+            LinkedIn
+          </label>
+          <input
+            name="linkedin"
+            value={formData.linkedin}
+            onChange={handleChange}
+            className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500"
+          />
+        </div>
+      </div>
+
+      {/* Save Button */}
+      <div className="flex justify-end border-t border-slate-200 pt-6">
+        <button
+          type="submit"
+          className="rounded-lg bg-indigo-600 px-5 py-2.5 font-medium text-white hover:bg-indigo-700"
+        >
+          Save changes
+        </button>
+      </div>
+    </form>
+  );
 }
