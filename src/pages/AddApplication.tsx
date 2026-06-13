@@ -1,9 +1,12 @@
 import { useState } from "react";
 import type { Application } from "../data/applications";
+import { useForm } from "../hooks/useForm";
 
 //we used object instead of multiple useState hooks to manage the form date in more organized way.
-export default function AddApplication() {
-  const [formData, setFormData] = useState<Omit<Application, "id">>({ //omit is used to omit id because id will be generated automatically wen the app. is saved, database will handle the id generation
+export default function AddApplication() { 
+  //useform is a custom hook that we created to manage form state and handle input changes in a reusable way across different forms in the application. 
+  const { formData, handleInputChange, resetForm } =
+    useForm<Omit<Application, "id">>({ //omit is used to omit id because id will be generated automatically wen the app. is saved, database will handle the id generation
     company: "",
     role: "",
     location: "",
@@ -16,36 +19,12 @@ export default function AddApplication() {
     notes: "",
   });
 
-  const handleInputChange = (event:
-    React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement> // This type definition allows the function to handle change events from input fields, select dropdowns, and textareas, which are all used in the form.
-  ) => {
-    const { name, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
 
-  
   const submitForm = (event: React.FormEvent<HTMLFormElement>) => { // This type definition indicates that the function will handle form submission events from an HTML form element.
     event.preventDefault();
     // Here you would typically handle form submission, e.g., send data to an API or update state in a parent component.
     console.log("Form submitted with data:", formData);
   }
-  const clearForm = () => {
-    setFormData({
-      company: "",
-      role: "",
-      location: "",
-      jobType: "full-time",
-      salary: "",
-      source: "",
-      status: "applied",
-      dateApplied: new Date().toISOString().split("T")[0],
-      followUpDate: "",
-      notes: "",
-    });
-  };
   return (
     <form onSubmit={submitForm} className="mx-auto max-w-4xl rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
       {/* Header */}
@@ -228,7 +207,7 @@ export default function AddApplication() {
       <div className="flex justify-end gap-3 border-t border-slate-200 pt-6">
         <button
           type="button"
-          onClick={clearForm}
+          onClick={resetForm}
           className="rounded-lg border border-slate-300 px-5 py-2.5 font-medium text-slate-700 hover:bg-slate-50"
         >
           Clear Form

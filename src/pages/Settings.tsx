@@ -1,8 +1,10 @@
 import { useState } from "react";
 import type { userData } from "../data/userData";
+import { useForm } from "../hooks/useForm";
 
 export default function Settings() {
-  const [formData, setFormData] = useState<userData>({
+  // Similar to AddApplication, we use the useForm hook here to manage the state of the user profile form. 
+  const {formData,handleInputChange} = useForm<userData>({
     firstName: "Alex",
     lastName: "Morgan",
     email: "alex@example.com",
@@ -11,16 +13,6 @@ export default function Settings() {
     linkedin: "linkedin.com/in/alexmorgan",
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,7 +41,7 @@ export default function Settings() {
           <input
             name="firstName"
             value={formData.firstName}
-            onChange={handleChange}
+            onChange={handleInputChange}
             className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500"
           />
         </div>
@@ -61,7 +53,7 @@ export default function Settings() {
           <input
             name="lastName"
             value={formData.lastName}
-            onChange={handleChange}
+            onChange={handleInputChange}
             className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500"
           />
         </div>
@@ -73,7 +65,7 @@ export default function Settings() {
           <input
             name="email"
             value={formData.email}
-            onChange={handleChange}
+            onChange={handleInputChange}
             className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500"
           />
         </div>
@@ -85,7 +77,7 @@ export default function Settings() {
           <input
             name="currentRole"
             value={formData.currentRole}
-            onChange={handleChange}
+            onChange={handleInputChange}
             className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500"
           />
         </div>
@@ -97,7 +89,7 @@ export default function Settings() {
           <input
             name="targetRole"
             value={formData.targetRole}
-            onChange={handleChange}
+            onChange={handleInputChange}
             className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500"
           />
         </div>
@@ -109,7 +101,7 @@ export default function Settings() {
           <input
             name="linkedin"
             value={formData.linkedin}
-            onChange={handleChange}
+            onChange={handleInputChange}
             className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500"
           />
         </div>
