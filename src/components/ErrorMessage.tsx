@@ -2,7 +2,7 @@ type ErrorProps = {
   error?: string;
 };
 
-export function ErrorMessage({ error }: ErrorProps) {
+export default function ErrorMessage({ error }: ErrorProps) {
   if (!error) return null;
 
   return (

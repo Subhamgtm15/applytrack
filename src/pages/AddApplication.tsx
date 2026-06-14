@@ -28,10 +28,8 @@ export default function AddApplication() {
     // Define which fields are actually required
     const missingFields = validate([
       "company",
-      "role",
       "location",
       "dateApplied",
-      "status",
       "jobType",
     ]);
     const newErrors: Record<string, string> = {};
@@ -120,6 +118,7 @@ export default function AddApplication() {
             <select name="jobType" value={formData.jobType}
               onChange={handleInputChange}
               className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500">
+                <option value="">Select job type</option>
               <option value="full-time">Full-time</option>
               <option value="part-time">Part-time</option>
               <option value="remote">Remote</option>
