@@ -3,6 +3,12 @@ import { Link, useLocation } from "react-router-dom";
 
 export default function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
   const location = useLocation();
+  const pageTitles:Record<string,string> = {
+    "/":"Dashboard",
+    "/applications":"Applications",
+    "/addapplication":"Add Application",  
+  "/settings":"Settings"
+  }
    // {pathname: "/applications", search: "", hash: "", state: null, key: "default"}
   return (
     <nav className="h-16 w-full bg-white border-b border-slate-200 flex items-center justify-between px-4 lg:px-6">
@@ -18,10 +24,7 @@ export default function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
         </button>
 
         <h1 className="text-sm font-semibold text-slate-700">
-          {location.pathname === "/" && "Dashboard"}
-          {location.pathname === "/applications" && "Applications"}
-          {location.pathname === "/addapplication" && "Add Application"}
-          {location.pathname === "/settings" && "Settings"}
+          {pageTitles[location.pathname]}
         </h1>
       </div>
 
