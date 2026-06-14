@@ -134,7 +134,7 @@ export default function AddApplication() {
 
           <div className="rounded-2xl bg-slate-50 p-4">
             <div className="h-72 w-full">
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height={280} minWidth={0} minHeight={0}>
                 <BarChart data={weeklyInterviewActivity} margin={{ top: 12, right: 12, left: -20, bottom: 8 }}>
                   <CartesianGrid vertical={false} stroke="#e2e8f0" strokeDasharray="3 3" />
                   <XAxis

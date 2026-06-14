@@ -253,7 +253,7 @@ export default function AddApplication() {
 
         <button
           type="submit"
-          className="rounded-lg bg-indigo-600 px-5 py-2.5 font-medium text-white hover:bg-indigo-700"
+          className="cursor-pointer rounded-lg bg-indigo-600 px-5 py-2.5 font-medium text-white hover:bg-indigo-700"
         >
           Save Application
         </button>

@@ -1,25 +1,60 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from "react-router-dom";
+type Props = {
+  open: boolean;
+  onClose: () => void;
+};
+const navItems = [
+  { to: "/", label: "Dashboard" },
+  { to: "/applications", label: "Applications" },
+  { to: "/addapplication", label: "Add Application" },
+  { to: "/settings", label: "Settings" },
+];
 
-export default function Sidebar() {
-    return (
-        <div className="w-64 h-screen bg-gray-800 text-white flex flex-col">
-            <div className="p-4 text-2xl font-bold">ApplyTrack</div>
-            <nav className="flex-1">
-                <ul>
-                    <li className="hover:bg-gray-700">
-                        <Link to="/" className="block px-4 py-2">Dashboard</Link>
-                    </li>
-                    <li className="hover:bg-gray-700">
-                        <Link to="/applications" className="block px-4 py-2">Applications</Link>
-                    </li>
-                    <li className="hover:bg-gray-700">
-                        <Link to="/addapplication" className="block px-4 py-2">Add Application</Link>
-                    </li>
-                    <li className="hover:bg-gray-700">
-                        <Link to="/settings" className="block px-4 py-2">Settings</Link>
-                    </li>
-                </ul>
-            </nav>
+export default function Sidebar({ open, onClose, }: Props) {
+  const location = useLocation(); // This hook gives us access to the current URL, which we can use to determine which nav item is active.
+  // console.log(location); // {pathname: "/applications", search: "", hash: "", state: null, key: "default"}
+
+  return (
+    <>
+      {/* overlay */}
+      {open && (
+        <div
+          onClick={onClose}
+          className="fixed inset-0 bg-black/30 z-40 lg:hidden"
+        />
+      )}
+
+      <aside
+        className={`
+          fixed lg:fixed top-0 left-0 z-50 h-screen w-64 bg-white border-r border-slate-200
+          transform transition-transform duration-300
+          ${open ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+        `}
+      >
+        <div className="px-6 py-5 text-lg font-bold ">
+          ApplyTrack
         </div>
-    )
+
+        <nav className="p-3 space-y-1">
+          {navItems.map((item) => {
+            const isActive = location.pathname === item.to;
+
+            return (
+              <Link
+                key={item.to}
+                to={item.to}
+                onClick={onClose}
+                className={`block px-4 py-2 rounded-lg text-sm transition ${isActive
+                    ? "bg-indigo-50 text-indigo-600 font-medium"
+                    : "text-slate-600 hover:bg-slate-100"
+                  }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
+      </aside>
+    </>
+  );
 }

@@ -1,26 +1,34 @@
-import { Outlet } from 'react-router-dom'
-import Navbar from './Navbar'
-import Sidebar from './Sidebar'
+import { useState } from "react";
+import { Outlet } from "react-router-dom";
+import Navbar from "./Navbar";
+import Sidebar from "./Sidebar";
 
 export function MainLayout() {
-    return (
-        <div className="flex min-h-scree text-slate-900">
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-            <aside className="fixed left-0 top-0 h-screen w-64 border-r border-slate-200 bg-gray-800 text-white hidden lg:block">
-                <Sidebar />
-            </aside>
+  return (
+    <div className="flex min-h-screen bg-slate-50">
 
-            <div className="ml-64 flex min-h-screen flex-1 flex-col">
+      {/* Sidebar */}
+      <Sidebar
+        open={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
-                <Navbar />
+      {/* Main */}
+      <div className="flex flex-1 flex-col lg:ml-64">
 
-                <main className="flex-1 mt-16 md:p-4 ">
-                    <div className="mx-auto w-full  rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
-                        <Outlet />
-                    </div>
-                </main>
+        {/* Navbar */}
+        <Navbar onMenuClick={() => setSidebarOpen(true)} />
 
-            </div>
-        </div>
-    )
+        {/* Page Content */}
+        <main className="p-4 sm:p-6">
+          <div className="mx-auto max-w-6xl">
+            <Outlet />
+          </div>
+        </main>
+
+      </div>
+    </div>
+  );
 }
