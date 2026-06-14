@@ -18,7 +18,7 @@ export default function Navbar({ darkMode, toggleTheme, onMenuClick }: Props) {
 
   // {pathname: "/applications", search: "", hash: "", state: null, key: "default"}
   return (
-    <nav className="h-16 w-full bg-white border-b border-slate-200 flex items-center justify-between px-4 lg:px-6 dark:bg-slate-800 dark:border-slate-700">
+    <nav className="h-16 w-full sticky top-0 z-50 backdrop-blur bg-white border-b border-slate-200 flex items-center justify-between px-4 lg:px-6 dark:bg-slate-800 dark:border-slate-700 py-3">
 
       {/* Left */}
       <div className="flex items-center gap-3">

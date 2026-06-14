@@ -39,7 +39,7 @@ export function MainLayout() {
       />
 
       {/* Main */}
-      <div className="flex flex-1 flex-col lg:ml-64">
+      <div className="flex flex-1 flex-col lg:ml-64 h-screen overflow-y-auto">
 
         {/* Navbar */}
         <Navbar darkMode={darkMode} toggleTheme={toggleTheme} onMenuClick={() => setSidebarOpen(true)} />
