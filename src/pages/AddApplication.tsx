@@ -1,29 +1,53 @@
 import { useState } from "react";
 import type { Application } from "../data/applications";
 import { useForm } from "../hooks/useForm";
+import ErrorMessage from "../components/ErrorMessage";
 
 //we used object instead of multiple useState hooks to manage the form date in more organized way.
-export default function AddApplication() { 
+export default function AddApplication() {
   //useform is a custom hook that we created to manage form state and handle input changes in a reusable way across different forms in the application. 
-  const { formData, handleInputChange, resetForm } =
-    useForm<Omit<Application, "id">>({ //omit is used to omit id because id will be generated automatically wen the app. is saved, database will handle the id generation
-    company: "",
-    role: "",
-    location: "",
-    jobType: "full-time",
-    salary: "",
-    source: "",
-    status: "applied",
-    dateApplied: new Date().toISOString().split("T")[0], //set the date to current date  
-    followUpDate: "",
-    notes: "",
-  });
+  const { formData, handleInputChange, resetForm, validate } =
+    useForm<Omit<Application, "id">>({ //omit is used to omit id because id will be generated automatically when the app. is saved, database will handle the id generation
+      company: "",
+      role: "",
+      location: "",
+      jobType: "full-time",
+      salary: "",
+      source: "",
+      status: "applied",
+      dateApplied: new Date().toISOString().split("T")[0], //set the date to current date  
+      followUpDate: "",
+      notes: "",
+    });
+  const [errors, setErrors] = useState<Record<string, string>>({}); //object with field as string and message as string 
+
 
 
   const submitForm = (event: React.FormEvent<HTMLFormElement>) => { // This type definition indicates that the function will handle form submission events from an HTML form element.
     event.preventDefault();
-    // Here you would typically handle form submission, e.g., send data to an API or update state in a parent component.
-    console.log("Form submitted with data:", formData);
+    // Define which fields are actually required
+    const missingFields = validate([
+      "company",
+      "role",
+      "location",
+      "dateApplied",
+      "status",
+      "jobType",
+    ]);
+    const newErrors: Record<string, string> = {};
+
+    missingFields.forEach((field) => {
+      newErrors[field] = `${field} is required`;
+    });
+
+
+    if (missingFields.length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+    setErrors({});
+    console.log(formData);
+    resetForm();
   }
   return (
     <form onSubmit={submitForm} className="mx-auto max-w-4xl rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
@@ -56,6 +80,7 @@ export default function AddApplication() {
               placeholder="e.g. Stripe"
               className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500"
             />
+            <ErrorMessage error={errors.company} />
           </div>
 
           <div>
@@ -70,6 +95,7 @@ export default function AddApplication() {
               placeholder="e.g. Frontend Engineer"
               className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500"
             />
+            <ErrorMessage error={errors.role} />
           </div>
 
           <div>
@@ -84,6 +110,7 @@ export default function AddApplication() {
               placeholder="e.g. Kathmandu, Nepal"
               className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500"
             />
+            <ErrorMessage error={errors.location} />
           </div>
 
           <div>
@@ -99,6 +126,7 @@ export default function AddApplication() {
               <option value="contract">Contract</option>
               <option value="freelance">Freelance</option>
             </select>
+            <ErrorMessage error={errors.jobType} />
           </div>
 
           <div>
@@ -113,6 +141,7 @@ export default function AddApplication() {
               placeholder="e.g. $80k - $120k"
               className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500"
             />
+            
           </div>
 
           <div>
@@ -151,6 +180,7 @@ export default function AddApplication() {
               <option value="rejected">Rejected</option>
               <option value="follow-up">Follow-up</option>
             </select>
+            <ErrorMessage error={errors.status} />
           </div>
 
           <div>
@@ -164,6 +194,7 @@ export default function AddApplication() {
               onChange={handleInputChange}
               className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500"
             />
+            <ErrorMessage error={errors.dateApplied} />
           </div>
 
           <div>
