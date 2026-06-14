@@ -119,20 +119,20 @@ export default function AddApplication() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-6">
 
         {/* LEFT: Application Activity */}
-        <div className="lg:col-span-2 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className="lg:col-span-2 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200">
           <div className="mb-6 flex items-start justify-between gap-4">
             <div>
-              <h2 className="text-xl font-semibold tracking-tight text-slate-900">Application Activity</h2>
-              <p className="mt-1 text-sm leading-6 text-slate-500">Interview applications grouped by week using the dateApplied field</p>
+              <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">Application Activity</h2>
+              <p className="mt-1 text-sm leading-6 text-slate-500 dark:text-slate-400">Interview applications grouped by week using the dateApplied field</p>
             </div>
-            <div className="rounded-full bg-purple-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-purple-700">
+            <div className="rounded-full bg-purple-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-purple-700 dark:bg-purple-900/40 dark:text-purple-300">
               Week wise
             </div>
           </div>
 
           {/* bar chart showing the count of interview applications for each of the last 6 weeks, using the weeklyInterviewActivity data we calculated */}
 
-          <div className="rounded-2xl bg-slate-50 p-4">
+          <div className="rounded-2xl bg-slate-50 p-4 dark:bg-slate-700/50">
             <div className="h-72 w-full">
               <ResponsiveContainer width="100%" height={280} minWidth={0} minHeight={0}>
                 <BarChart data={weeklyInterviewActivity} margin={{ top: 12, right: 12, left: -20, bottom: 8 }}>
@@ -167,11 +167,11 @@ export default function AddApplication() {
         </div>
 
         {/* RIGHT: Upcoming */}
-        <div className=" p-4 bg-white col-span-1 border border-slate-200 rounded-2xl shadow-2xs">
-          <div className="mb-4 text-lg font-semibold">Upcoming</div>
+        <div className="p-4 bg-white col-span-1 border border-slate-200 rounded-2xl shadow-2xs dark:bg-slate-800 dark:border-slate-700">
+          <div className="mb-4 text-lg font-semibold dark:text-slate-100">Upcoming</div>
           <div className="flex flex-col gap-4">
             {upcomingInterviews.length === 0 ? (
-              <p className="text-sm text-gray-500">No upcoming interviews or follow-ups.</p>
+              <p className="text-sm text-gray-500 dark:text-slate-400">No upcoming interviews or follow-ups.</p>
             ) : (
               upcomingInterviews.map((app) => (
                 <Upcoming
@@ -192,38 +192,38 @@ export default function AddApplication() {
         </div>
       </div>
       {/* // Recent Applications List */}
-      <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:bg-slate-800 dark:border-slate-700">
         <div className="mb-5 flex items-center justify-between gap-4">
           <div>
-            <h2 className="text-xl font-semibold tracking-tight text-slate-900">Recent Applications</h2>
-            <p className="mt-1 text-sm leading-6 text-slate-500">Newest applications first, sorted by the dateApplied field</p>
+            <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">Recent Applications</h2>
+            <p className="mt-1 text-sm leading-6 text-slate-500 dark:text-slate-400">Newest applications first, sorted by the dateApplied field</p>
           </div>
           <Link
             to="/applications"
-            className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+            className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:border-slate-500 dark:hover:bg-slate-700"
           >
             View all
             <ChevronRight className="h-4 w-4" />
           </Link>
         </div>
 
-        <div className="divide-y divide-slate-100">
+        <div className="divide-y divide-slate-100 dark:divide-slate-700">
           {recentApplications.map((app) => (
             <RecentApplicationRow key={app.id} application={app} />
           ))}
         </div>
       </div>
       {/* // Call to Action for adding new application */}
-      <div className="mt-6 rounded-3xl border border-indigo-100 bg-indigo-50/70 p-6 shadow-sm">
+      <div className="mt-6 rounded-3xl border border-indigo-100 bg-indigo-50/70 p-6 shadow-sm dark:border-indigo-900/50 dark:bg-indigo-950/40">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <h2 className="text-lg font-semibold tracking-tight text-slate-900 md:text-xl">Ready to track a new application?</h2>
-            <p className="mt-1 text-sm leading-6 text-slate-600">Log your latest job application in under a minute.</p>
+            <h2 className="text-lg font-semibold tracking-tight text-slate-900 md:text-xl dark:text-slate-100">Ready to track a new application?</h2>
+            <p className="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-400">Log your latest job application in under a minute.</p>
           </div>
 
           <Link
             to="/addapplication"
-            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500"
+            className="inline-flex items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400"
           >
             <span className="flex h-4.5 w-4.5 items-center justify-center rounded-full border border-white/60 text-xs leading-none">+</span>
             Add Application

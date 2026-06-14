@@ -6,7 +6,7 @@ export default function ErrorMessage({ error }: ErrorProps) {
   if (!error) return null;
 
   return (
-    <p className="text-sm text-red-500 mt-1">
+    <p className="text-sm text-red-500 mt-1 dark:text-red-300">
       {error}
     </p>
   );

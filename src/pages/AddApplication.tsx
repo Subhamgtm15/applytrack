@@ -51,31 +51,31 @@ export default function AddApplication() {
     resetForm();
   }
   return (
-    <form onSubmit={submitForm} className="mx-auto max-w-4xl rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
+    <form onSubmit={submitForm} className="mx-auto max-w-4xl rounded-2xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-700 dark:bg-slate-800">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900">
+        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
           New Application
         </h1>
-        <p className="mt-2 text-sm text-slate-500">
+        <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
           Track a job you've applied to or plan to apply for.
         </p>
       </div>
       {message && (
-        <p className="mb-4 rounded-lg bg-green-50 p-3 text-sm text-green-600">
+        <p className="mb-4 rounded-lg bg-green-50 p-3 text-sm text-green-600 dark:bg-green-900/40 dark:text-green-300">
           {message}
         </p>
       )}
 
       {/* Job Information */}
       <section className="mb-8">
-        <h2 className="mb-4 text-lg font-semibold text-slate-900">
+        <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-slate-100">
           Job Information
         </h2>
 
         <div className="grid gap-5 md:grid-cols-2">
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">
+            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
               Company Name *
             </label>
             <input
@@ -84,13 +84,13 @@ export default function AddApplication() {
               value={formData.company}
               onChange={handleInputChange}
               placeholder="e.g. Stripe"
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500"
+              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:placeholder:text-slate-500 dark:focus:border-indigo-400"
             />
             <ErrorMessage error={errors.company} />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">
+            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
               Job Title *
             </label>
             <input
@@ -99,13 +99,13 @@ export default function AddApplication() {
               value={formData.role}
               onChange={handleInputChange}
               placeholder="e.g. Frontend Engineer"
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500"
+              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:placeholder:text-slate-500 dark:focus:border-indigo-400"
             />
             <ErrorMessage error={errors.role} />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">
+            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
               Location *
             </label>
             <input
@@ -114,18 +114,18 @@ export default function AddApplication() {
               value={formData.location}
               onChange={handleInputChange}
               placeholder="e.g. Kathmandu, Nepal"
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500"
+              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:placeholder:text-slate-500 dark:focus:border-indigo-400"
             />
             <ErrorMessage error={errors.location} />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">
+            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
               Job Type *
             </label>
             <select name="jobType" value={formData.jobType}
               onChange={handleInputChange}
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500">
+              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:border-indigo-400">
               <option value="">Select job type</option>
               <option value="full-time">Full-time</option>
               <option value="part-time">Part-time</option>
@@ -137,7 +137,7 @@ export default function AddApplication() {
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">
+            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
               Salary Range
             </label>
             <input
@@ -146,13 +146,13 @@ export default function AddApplication() {
               value={formData.salary}
               onChange={handleInputChange}
               placeholder="e.g. $80k - $120k"
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500"
+              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:placeholder:text-slate-500 dark:focus:border-indigo-400"
             />
 
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">
+            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
               Source
             </label>
             <input
@@ -161,7 +161,7 @@ export default function AddApplication() {
               value={formData.source}
               onChange={handleInputChange}
               placeholder="LinkedIn, Referral..."
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500"
+              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:placeholder:text-slate-500 dark:focus:border-indigo-400"
             />
           </div>
         </div>
@@ -169,18 +169,18 @@ export default function AddApplication() {
 
       {/* Status & Dates */}
       <section className="mb-8">
-        <h2 className="mb-4 text-lg font-semibold text-slate-900">
+        <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-slate-100">
           Status & Dates
         </h2>
 
         <div className="grid gap-5 md:grid-cols-2">
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">
+            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
               Status *
             </label>
             <select name="status" value={formData.status}
               onChange={handleInputChange}
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500">
+              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:border-indigo-400">
               <option value="applied">Applied</option>
               <option value="interview">Interview</option>
               <option value="offer">Offer</option>
@@ -191,7 +191,7 @@ export default function AddApplication() {
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">
+            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
               Date Applied *
             </label>
             <input
@@ -199,13 +199,13 @@ export default function AddApplication() {
               name="dateApplied"
               value={formData.dateApplied}
               onChange={handleInputChange}
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500"
+              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:border-indigo-400"
             />
             <ErrorMessage error={errors.dateApplied} />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">
+            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
               Follow-up Date
             </label>
             <input
@@ -213,7 +213,7 @@ export default function AddApplication() {
               name="followUpDate"
               value={formData.followUpDate}
               onChange={handleInputChange}
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500"
+              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:border-indigo-400"
             />
           </div>
         </div>
@@ -226,7 +226,7 @@ export default function AddApplication() {
         </h2>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-slate-700">
+          <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
             Application Notes
           </label>
 
@@ -236,24 +236,24 @@ export default function AddApplication() {
             onChange={handleInputChange}
             rows={5}
             placeholder="Add any notes about this application..."
-            className="w-full resize-none rounded-lg border border-slate-300 px-4 py-3 outline-none transition focus:border-indigo-500"
+            className="w-full resize-none rounded-lg border border-slate-300 px-4 py-3 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:placeholder:text-slate-500 dark:focus:border-indigo-400"
           />
         </div>
       </section>
 
       {/* Actions */}
-      <div className="flex justify-end gap-3 border-t border-slate-200 pt-6">
+      <div className="flex justify-end gap-3 border-t border-slate-200 pt-6 dark:border-slate-700">
         <button
           type="button"
           onClick={resetForm}
-          className="rounded-lg border border-slate-300 px-5 py-2.5 font-medium text-slate-700 hover:bg-slate-50"
+          className="rounded-lg border border-slate-300 px-5 py-2.5 font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-700/50"
         >
           Clear Form
         </button>
 
         <button
           type="submit"
-          className="cursor-pointer rounded-lg bg-indigo-600 px-5 py-2.5 font-medium text-white hover:bg-indigo-700"
+          className="cursor-pointer rounded-lg bg-indigo-600 px-5 py-2.5 font-medium text-white hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600"
         >
           Save Application
         </button>

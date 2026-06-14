@@ -6,11 +6,11 @@ type RecentApplicationRowProps = {
 };
 
 const statusBadgeClasses: Record<Application["status"], string> = {
-  applied: "bg-blue-50 text-blue-700 ring-blue-200",
-  interview: "bg-purple-50 text-purple-700 ring-purple-200",
-  offer: "bg-green-50 text-green-700 ring-green-200",
-  rejected: "bg-red-50 text-red-700 ring-red-200",
-  "follow-up": "bg-amber-50 text-amber-700 ring-amber-200",
+  applied: "bg-blue-50 text-blue-700 ring-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:ring-blue-800",
+  interview: "bg-purple-50 text-purple-700 ring-purple-200 dark:bg-violet-900/40 dark:text-violet-300 dark:ring-violet-800",
+  offer: "bg-green-50 text-green-700 ring-green-200 dark:bg-emerald-900/40 dark:text-emerald-300 dark:ring-emerald-800",
+  rejected: "bg-red-50 text-red-700 ring-red-200 dark:bg-red-900/40 dark:text-red-300 dark:ring-red-800",
+  "follow-up": "bg-amber-50 text-amber-700 ring-amber-200 dark:bg-amber-900/40 dark:text-amber-300 dark:ring-amber-800",
 };
 
 const avatarColors = [
@@ -38,10 +38,10 @@ export default function RecentApplicationRow({ application }: RecentApplicationR
         </div>
 
         <div className="min-w-0">
-          <p className="truncate text-[15px] font-semibold tracking-tight text-slate-900">{application.company}</p>
-          <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-slate-500">
-            <span className="font-medium text-slate-700">{application.role}</span>
-            <span className="text-slate-300">/</span>
+          <p className="truncate text-[15px] font-semibold tracking-tight text-slate-900 dark:text-slate-100">{application.company}</p>
+          <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[13px] text-slate-500 dark:text-slate-400">
+            <span className="font-medium text-slate-700 dark:text-slate-300">{application.role}</span>
+            <span className="text-slate-300 dark:text-slate-600">/</span>
             <span>{application.location}</span>
           </div>
         </div>
@@ -51,14 +51,14 @@ export default function RecentApplicationRow({ application }: RecentApplicationR
         <span className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ring-1 ${statusBadgeClasses[application.status]}`}>
           {application.status}
         </span>
-        <span className="min-w-24 text-[13px] font-medium text-slate-500">
+        <span className="min-w-24 text-[13px] font-medium text-slate-500 dark:text-slate-400">
           {new Date(application.dateApplied).toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",
             year: "numeric",
           })}
         </span>
-        <ChevronRight className="h-4 w-4 shrink-0 text-slate-400" />
+        <ChevronRight className="h-4 w-4 shrink-0 text-slate-400 dark:text-slate-500" />
       </div>
     </div>
   );
