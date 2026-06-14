@@ -1,9 +1,10 @@
 import type { userData } from "../data/userData";
 import { useForm } from "../hooks/useForm";
+import { useMessage } from "../hooks/useMessage";
 
 export default function Settings() {
   // Similar to AddApplication, we use the useForm hook here to manage the state of the user profile form. 
-  const {formData,handleInputChange} = useForm<userData>({
+  const { formData, handleInputChange } = useForm<userData>({
     firstName: "Alex",
     lastName: "Morgan",
     email: "alex@example.com",
@@ -12,9 +13,10 @@ export default function Settings() {
     linkedin: "linkedin.com/in/alexmorgan",
   });
 
-
+  const { message, showMessage } = useMessage(); //useMessage is a custom hook to show temporary messages to the user, such as success or error notifications. In this case, we can use it to show a success message when the profile is saved successfully.
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
+    showMessage("Profile saved successfully!"); // Show success message to user
     console.log("Saved profile:", formData);
   };
 
@@ -30,6 +32,11 @@ export default function Settings() {
           Manage your account and preferences.
         </p>
       </div>
+      {message && (
+        <p className="mb-4 rounded-lg bg-green-50 p-3 text-sm text-green-600">
+          {message}
+        </p>
+      )}
 
       {/* Profile Form */}
       <div className="grid gap-5 md:grid-cols-2">

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { Application } from "../data/applications";
 import { useForm } from "../hooks/useForm";
+import { useMessage } from "../hooks/useMessage";
 import ErrorMessage from "../components/ErrorMessage";
 
 //we used object instead of multiple useState hooks to manage the form date in more organized way.
@@ -22,7 +23,7 @@ export default function AddApplication() {
   const [errors, setErrors] = useState<Record<string, string>>({}); //object with field as string and message as string 
 
 
-
+  const { message, showMessage } = useMessage(); //custom hook to show message to user
   const submitForm = (event: React.FormEvent<HTMLFormElement>) => { // This type definition indicates that the function will handle form submission events from an HTML form element.
     event.preventDefault();
     // Define which fields are actually required
@@ -44,6 +45,7 @@ export default function AddApplication() {
       return;
     }
     setErrors({});
+    showMessage("Application saved successfully!"); // Show success message to user
     console.log(formData);
     resetForm();
   }
@@ -58,6 +60,11 @@ export default function AddApplication() {
           Track a job you've applied to or plan to apply for.
         </p>
       </div>
+      {message && (
+        <p className="mb-4 rounded-lg bg-green-50 p-3 text-sm text-green-600">
+          {message}
+        </p>
+      )}
 
       {/* Job Information */}
       <section className="mb-8">
@@ -118,7 +125,7 @@ export default function AddApplication() {
             <select name="jobType" value={formData.jobType}
               onChange={handleInputChange}
               className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500">
-                <option value="">Select job type</option>
+              <option value="">Select job type</option>
               <option value="full-time">Full-time</option>
               <option value="part-time">Part-time</option>
               <option value="remote">Remote</option>
@@ -140,7 +147,7 @@ export default function AddApplication() {
               placeholder="e.g. $80k - $120k"
               className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500"
             />
-            
+
           </div>
 
           <div>
