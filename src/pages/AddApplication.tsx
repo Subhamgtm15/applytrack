@@ -20,6 +20,7 @@ export default function AddApplication() {
       followUpDate: "",
       notes: "",
     });
+    
   const [errors, setErrors] = useState<Record<string, string>>({}); //object with field as string and message as string 
 
 
@@ -36,7 +37,7 @@ export default function AddApplication() {
     const newErrors: Record<string, string> = {};
 
     missingFields.forEach((field) => {
-      newErrors[field] = `${field} is required`;
+      newErrors[field] = `${field} is required`; //transformation of field name to error message, for example if company is missing then it will set newErrors["company"] = "company is required"
     });
 
 
