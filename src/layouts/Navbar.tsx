@@ -1,6 +1,9 @@
 import { Menu } from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 
 export default function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
+  const location = useLocation();
+   // {pathname: "/applications", search: "", hash: "", state: null, key: "default"}
   return (
     <nav className="h-16 w-full bg-white border-b border-slate-200 flex items-center justify-between px-4 lg:px-6">
 
@@ -15,7 +18,10 @@ export default function Navbar({ onMenuClick }: { onMenuClick: () => void }) {
         </button>
 
         <h1 className="text-sm font-semibold text-slate-700">
-          Dashboard
+          {location.pathname === "/" && "Dashboard"}
+          {location.pathname === "/applications" && "Applications"}
+          {location.pathname === "/addapplication" && "Add Application"}
+          {location.pathname === "/settings" && "Settings"}
         </h1>
       </div>
 
