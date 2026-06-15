@@ -1,11 +1,11 @@
 import applications from "../data/applications";
 import RecentApplicationRow from "../components/RecentApplicationRow";
 import StatCard from "../components/StatCard";
-import Upcoming from "../components/upcoming";
+import Upcoming from "../components/Upcoming";
 import { BadgeCheck, BriefcaseBusiness, ChevronRight, Clock3, CircleX, Handshake } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Link } from "react-router-dom";
-export default function AddApplication() {
+export default function Dashboard() {
   const endOfCurrentWeek = new Date();
   endOfCurrentWeek.setHours(0, 0, 0, 0); //Remove Time Part
 
