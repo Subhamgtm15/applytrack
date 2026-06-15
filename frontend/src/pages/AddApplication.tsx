@@ -20,12 +20,12 @@ export default function AddApplication() {
       followUpDate: "",
       notes: "",
     });
-    
+
   const [errors, setErrors] = useState<Record<string, string>>({}); //object with field as string and message as string 
 
 
   const { message, showMessage } = useMessage(); //custom hook to show message to user
-  const submitForm = (event: React.FormEvent<HTMLFormElement>) => { // This type definition indicates that the function will handle form submission events from an HTML form element.
+  const submitForm = async (event: React.FormEvent<HTMLFormElement>) => { // This type definition indicates that the function will handle form submission events from an HTML form element.
     event.preventDefault();
     // Define which fields are actually required
     const missingFields = validate([
@@ -46,9 +46,36 @@ export default function AddApplication() {
       return;
     }
     setErrors({});
-    showMessage("Application saved successfully!"); // Show success message to user
-    console.log(formData);
-    resetForm();
+
+    //send the form data to the backend to save in the database, we will use fetch api to send a post request to the backend with the form data in json format. We will also handle the response from the backend and show a message to the user based on the response.
+    try {
+      const response = await fetch(
+        "http://localhost:5000/applications",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to save application");
+      }
+
+      const savedApplication = await response.json();
+
+      console.log(savedApplication);
+
+      showMessage("Application saved successfully!");
+
+      resetForm();
+    } catch (error) {
+      console.error(error);
+
+      showMessage("Failed to save application.");
+    }
   }
   return (
     <form onSubmit={submitForm} className="mx-auto max-w-4xl rounded-2xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-700 dark:bg-slate-800">
