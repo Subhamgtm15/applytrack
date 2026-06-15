@@ -37,4 +37,3 @@ Currently focused on frontend development. Backend and database integration comi
 
 ---
 
-## Project Structure

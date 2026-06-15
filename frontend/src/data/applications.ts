@@ -6,7 +6,6 @@ export type Application = {
   id: string;
   company: string;
   role: string;
-  // jobLink?: string;
   location: string;
   jobType: JobType;
   status: ApplicationStatus;
