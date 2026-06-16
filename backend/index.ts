@@ -51,7 +51,20 @@ app.get("/applications",async (req, res) => {
         res.status(500).json({error:"An error occurred while fetching applications"});
     }
 })
+//delete endpoint
 
+app.delete("/applications/:id", async (req, res) => {
+    const { id } = req.params;
+    const deleteQuery = `DELETE FROM applications WHERE id = $1`;   
+    try {
+        await pool.query(deleteQuery, [id]);
+        res.status(200).json({ message: "Application deleted successfully" });
+    }   
+    catch (error) {
+        console.error("Error deleting application:", error);
+        res.status(500).json({ error: "An error occurred while deleting the application" });
+    }
+});
 app.listen(5000, () => {
     console.log("Server running on port 5000");
 });

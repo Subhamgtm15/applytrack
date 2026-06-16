@@ -72,8 +72,10 @@ export default function AddApplication() {
       console.log(savedApplication);
 
       showMessage("Application saved successfully!");
-      window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to top to show the success message
       resetForm();
+      setTimeout(() => {
+        navigate("/applications")
+      }, 200); // Navigate to the applications page after a short delay to allow the user to see the success message. You can adjust the delay time as needed.
        
     } catch (error) {
       console.error(error);

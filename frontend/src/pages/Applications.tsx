@@ -48,6 +48,20 @@ export default function Applications() {
     return new Date(secondApp.dateApplied).getTime() - new Date(firstApp.dateApplied).getTime();
   });
 
+  const deleteApplication = async(id: number) => {
+  // Implement the logic to delete the application with the given id
+
+  try{await fetch(`http://localhost:5000/applications/${id}`, {
+    method: 'DELETE',
+  });}
+  catch(error){
+    console.error('Error deleting application:', error);
+  }
+  setApplications((prev) =>
+    prev.filter((app) => parseInt(app.id) !== id)
+  );
+}
+
   return (
     <section className="space-y-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
@@ -141,7 +155,7 @@ export default function Applications() {
 
         <div className="divide-y divide-slate-100 dark:divide-slate-700">
           {displayedApplications.map((application) => (
-            <ApplicationTableRow key={application.id} application={application} />
+            <ApplicationTableRow key={application.id} application={application} deleteApplication={deleteApplication}/>
           ))}
         </div>
       </div>
