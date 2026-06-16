@@ -3,9 +3,11 @@ import type { Application } from "../data/applications";
 import { useForm } from "../hooks/useForm";
 import { useMessage } from "../hooks/useMessage";
 import ErrorMessage from "../components/ErrorMessage";
+import { useNavigate } from "react-router-dom";
 
 //we used object instead of multiple useState hooks to manage the form date in more organized way.
 export default function AddApplication() {
+  const navigate=useNavigate();
   //useform is a custom hook that we created to manage form state and handle input changes in a reusable way across different forms in the application. 
   const { formData, handleInputChange, resetForm, validate } =
     useForm<Omit<Application, "id">>({ //omit is used to omit id because id will be generated automatically when the app. is saved, database will handle the id generation
@@ -48,6 +50,7 @@ export default function AddApplication() {
     setErrors({});
 
     //send the form data to the backend to save in the database, we will use fetch api to send a post request to the backend with the form data in json format. We will also handle the response from the backend and show a message to the user based on the response.
+    
     try {
       const response = await fetch(
         "http://localhost:5000/applications",
@@ -69,13 +72,15 @@ export default function AddApplication() {
       console.log(savedApplication);
 
       showMessage("Application saved successfully!");
-
+      window.scrollTo({ top: 0, behavior: "smooth" }); // Scroll to top to show the success message
       resetForm();
+       
     } catch (error) {
       console.error(error);
 
       showMessage("Failed to save application.");
     }
+   
   }
   return (
     <form onSubmit={submitForm} className="mx-auto max-w-4xl rounded-2xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-700 dark:bg-slate-800">

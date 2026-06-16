@@ -1,19 +1,29 @@
 import { ArrowUpDown, ChevronDown, PlusCircle, Search, SlidersHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
 import ApplicationTableRow from "../components/ApplicationTableRow";
-import applications from "../data/applications";
 import type { Application } from "../data/applications";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 
 export default function Applications() {
-  const allApplications = [...applications];
-
+   useEffect(() => {
+    const fetchApplications = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/applications'); // 1. Fetch data from the backend API
+        const result = await response.json();
+        setApplications(result.applications || []); // 2. Update state with results
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchApplications(); 
+  }, []);
+  const [applications,setApplications]=useState<Application[]>([]);
   const [searchInput, setSearchInput] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | Application["status"]>("all");
   const [typeFilter, setTypeFilter] = useState<"all" | Application["jobType"]>("all");
   const [sortOption, setSortOption] = useState<"date-desc" | "date-asc" | "company-asc">("date-desc"); //this means sortoptions has three possible values but initially set to "date-desc"  
 
-  const filteredApplications = allApplications.filter((application) => {
+  const filteredApplications = applications.filter((application) => {
     const query = searchInput.toLowerCase();
     const matchesSearch =
       application.company.toLowerCase().includes(query) ||
@@ -43,7 +53,7 @@ export default function Applications() {
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
           <h1 className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">All Applications</h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{displayedApplications.length} of {allApplications.length} applications</p>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{displayedApplications.length} of {applications.length} applications</p>
         </div>
 
         <Link
