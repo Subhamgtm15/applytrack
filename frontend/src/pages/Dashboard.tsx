@@ -7,24 +7,30 @@ import { BadgeCheck, BriefcaseBusiness, ChevronRight, Clock3, CircleX, Handshake
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Link } from "react-router-dom";
 import { getAllApplications } from "../services/applicationService";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Dashboard() {
-  const [applications, setApplications] = useState<Application[]>([]);
-    useEffect(() => {
-    const fetchApplications = async () => {
-      try {
-        const response = await getAllApplications();;
-        const normalized = response.applications.map((app: any) => ({
-          ...app,
-          dateApplied: app.date_applied,
-          followUpDate: app.follow_up_date,
-        }));
-        setApplications(normalized || []); 
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } };  
-    fetchApplications();
-  }, []);
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["applications"],
+    queryFn: getAllApplications,
+  });
+  const applications = data ?? [];
+  // const [applications, setApplications] = useState<Application[]>([]);
+  //   useEffect(() => {
+  //   const fetchApplications = async () => {
+  //     try {
+  //       const response = await getAllApplications();;
+  //       const normalized = response.applications.map((app: any) => ({
+  //         ...app,
+  //         dateApplied: app.date_applied,
+  //         followUpDate: app.follow_up_date,
+  //       }));
+  //       setApplications(normalized || []); 
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     } };  
+  //   fetchApplications();
+  // }, []);
 
   const endOfCurrentWeek = new Date();
   endOfCurrentWeek.setHours(0, 0, 0, 0); //Remove Time Part

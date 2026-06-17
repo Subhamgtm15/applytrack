@@ -6,32 +6,46 @@ import { useState, useEffect } from "react";
 import {useNavigate} from "react-router-dom";
 import { deleteOneApplication} from "../services/applicationService";
 import { getAllApplications } from "../services/applicationService";
+import { useQuery } from "@tanstack/react-query";
+
 
 export default function Applications() {
 
-  const [applications, setApplications] = useState<Application[]>([]);
   const [searchInput, setSearchInput] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | Application["status"]>("all");
   const [typeFilter, setTypeFilter] = useState<"all" | Application["jobType"]>("all");
   const [sortOption, setSortOption] = useState<"date-desc" | "date-asc" | "company-asc">("date-desc"); //this means sortoptions has three possible values but initially set to "date-desc"  
   const navigate=useNavigate();
 
-    useEffect(() => {
-    const fetchApplications = async () => {
-      try {
-        const response = await getAllApplications();;
-        const normalized = response.applications.map((app: any) => ({
-          ...app,
-          dateApplied: app.date_applied,
-          followUpDate: app.follow_up_date,
-        }));
-        setApplications(normalized);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchApplications();
-  }, []);
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["applications"],
+    queryFn: getAllApplications,
+  });
+  const applications = data ?? [];
+  if (isLoading) {
+  return <div>Loading...</div>;
+}
+
+if (error) {
+  return <div>Failed to load applications.</div>;
+}
+
+  //   useEffect(() => {
+  //   const fetchApplications = async () => {
+  //     try {
+  //       const response = await getAllApplications();;
+  //       const normalized = response.applications.map((app: any) => ({
+  //         ...app,
+  //         dateApplied: app.date_applied,
+  //         followUpDate: app.follow_up_date,
+  //       }));
+  //       setApplications(normalized);
+  //     } catch (error) {
+  //       console.error('Error fetching data:', error);
+  //     }
+  //   };
+  //   fetchApplications();
+  // }, []);
 
   const filteredApplications = applications.filter((application) => {
     const query = searchInput.toLowerCase();
@@ -70,9 +84,9 @@ export default function Applications() {
       console.error('Error deleting application:', error);
     }
 
-    setApplications((prev) =>
-      prev.filter((app) => app.id !== id)  //app.id is string but id is number 
-    );
+    // setApplications((prev) =>
+    //   prev.filter((app) => app.id !== id)  //app.id is string but id is number 
+    // );
   }
 
   const editApplication = (id: number) => {
@@ -85,7 +99,7 @@ export default function Applications() {
       <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
           <h1 className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">All Applications</h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{displayedApplications.length} of {applications.length} applications</p>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{displayedApplications.length} of {applications?.length} applications</p>
         </div>
 
         <Link

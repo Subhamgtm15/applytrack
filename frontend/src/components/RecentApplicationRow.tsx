@@ -29,8 +29,7 @@ export default function RecentApplicationRow({ application }: RecentApplicationR
     .split("")
     .reduce((total, char) => total + char.charCodeAt(0), 0) % avatarColors.length;
   const avatarColor = avatarColors[colorIndex];
-  console.log(application.dateApplied); 
-
+  
   return (
     <div className="flex flex-col gap-4 py-4 first:pt-0 last:pb-0 md:flex-row md:items-center md:justify-between">
       <div className="flex min-w-0 items-center gap-3.5">
