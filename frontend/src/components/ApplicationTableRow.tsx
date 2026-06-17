@@ -152,7 +152,7 @@ export default function ApplicationTableRow({ application,deleteApplication }: A
           <button className="rounded-lg p-1 transition hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-700/50 dark:hover:text-slate-200" aria-label={`Edit ${application.company}`}>
             <Pencil className="h-4 w-4" />
           </button>
-          <button onClick={()=>deleteApplication(parseInt(application.id))} className="rounded-lg p-1 transition hover:bg-slate-100 hover:text-red-500 dark:hover:bg-slate-700/50" aria-label={`Delete ${application.company}`}>
+          <button onClick={()=>deleteApplication(application.id)} className="rounded-lg p-1 transition hover:bg-slate-100 hover:text-red-500 dark:hover:bg-slate-700/50" aria-label={`Delete ${application.company}`}>
             <Trash2 className="h-4 w-4" />
           </button>
         </div>

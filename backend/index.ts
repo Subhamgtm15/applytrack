@@ -55,10 +55,10 @@ app.get("/applications",async (req, res) => {
 
 app.delete("/applications/:id", async (req, res) => {
     const { id } = req.params;
-    const deleteQuery = `DELETE FROM applications WHERE id = $1`;   
+    const deleteQuery = `DELETE FROM applications WHERE id = $1 RETURNING *`;   
     try {
-        await pool.query(deleteQuery, [id]);
-        res.status(200).json({ message: "Application deleted successfully" });
+        const result =await pool.query(deleteQuery, [id]); 
+        res.status(200).json({deletedApplication:result.rows[0], message: "Application deleted successfully" });
     }   
     catch (error) {
         console.error("Error deleting application:", error);

@@ -1,4 +1,5 @@
-import applications from "../data/applications";
+import { useEffect, useState } from "react";
+import type { Application } from "../data/applications";
 import RecentApplicationRow from "../components/RecentApplicationRow";
 import StatCard from "../components/StatCard";
 import Upcoming from "../components/Upcoming";
@@ -6,6 +7,19 @@ import { BadgeCheck, BriefcaseBusiness, ChevronRight, Clock3, CircleX, Handshake
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Link } from "react-router-dom";
 export default function Dashboard() {
+  const [applications, setApplications] = useState<Application[]>([]);
+    useEffect(() => {
+    const fetchApplications = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/applications'); // 1. Fetch data from the backend <API>
+        const result = await response.json();
+        setApplications(result.applications || []); // 2. Update state with results
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } };  
+    fetchApplications();
+  }, []);
+
   const endOfCurrentWeek = new Date();
   endOfCurrentWeek.setHours(0, 0, 0, 0); //Remove Time Part
 

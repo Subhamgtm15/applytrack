@@ -2,22 +2,27 @@ import { ArrowUpDown, ChevronDown, PlusCircle, Search, SlidersHorizontal } from 
 import { Link } from "react-router-dom";
 import ApplicationTableRow from "../components/ApplicationTableRow";
 import type { Application } from "../data/applications";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 
 export default function Applications() {
-   useEffect(() => {
+  useEffect(() => {
     const fetchApplications = async () => {
       try {
         const response = await fetch('http://localhost:5000/applications'); // 1. Fetch data from the backend API
         const result = await response.json();
-        setApplications(result.applications || []); // 2. Update state with results
+        const normalized = result.applications.map((app: any) => ({
+          ...app,
+          dateApplied: app.date_applied,
+          followUpDate: app.follow_up_date,
+        }));
+        setApplications(normalized);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-    fetchApplications(); 
+    fetchApplications();
   }, []);
-  const [applications,setApplications]=useState<Application[]>([]);
+  const [applications, setApplications] = useState<Application[]>([]);
   const [searchInput, setSearchInput] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | Application["status"]>("all");
   const [typeFilter, setTypeFilter] = useState<"all" | Application["jobType"]>("all");
@@ -48,19 +53,24 @@ export default function Applications() {
     return new Date(secondApp.dateApplied).getTime() - new Date(firstApp.dateApplied).getTime();
   });
 
-  const deleteApplication = async(id: number) => {
-  // Implement the logic to delete the application with the given id
+  const deleteApplication = async (id: number) => {
+    // Implement the logic to delete the application with the given id
 
-  try{await fetch(`http://localhost:5000/applications/${id}`, {
-    method: 'DELETE',
-  });}
-  catch(error){
-    console.error('Error deleting application:', error);
+    try {
+      const response = await fetch(`http://localhost:5000/applications/${id}`, {
+        method: 'DELETE',
+      })
+      const deletedApplication = await response.json();
+      console.log('Deleted application:', deletedApplication.deletedApplication);
+    }
+    catch (error) {
+      console.error('Error deleting application:', error);
+    }
+
+    setApplications((prev) =>
+      prev.filter((app) => app.id !== id)  //app.id is string but id is number 
+    );
   }
-  setApplications((prev) =>
-    prev.filter((app) => parseInt(app.id) !== id)
-  );
-}
 
   return (
     <section className="space-y-6">
@@ -155,7 +165,7 @@ export default function Applications() {
 
         <div className="divide-y divide-slate-100 dark:divide-slate-700">
           {displayedApplications.map((application) => (
-            <ApplicationTableRow key={application.id} application={application} deleteApplication={deleteApplication}/>
+            <ApplicationTableRow key={application.id} application={application} deleteApplication={deleteApplication} />
           ))}
         </div>
       </div>
