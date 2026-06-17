@@ -13,6 +13,7 @@ export default function AppRoutes() {
         <Route path="/" element={<Dashboard />} />
         <Route path="/applications" element={<Applications />} />
         <Route path="/addapplication" element={<AddApplication />} />
+        <Route path="/addapplication/:id" element={<AddApplication />} />
         <Route path="/settings" element={<Settings />} />
       </Route>
     </Routes>

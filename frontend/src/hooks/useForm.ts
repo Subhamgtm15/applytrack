@@ -2,7 +2,7 @@ import { useState } from "react";
 
 export function useForm<T>(initialState: T) {
   const [formData, setFormData] = useState<T>(initialState); //this T and intial state respecitvely represents any type of form data we want to manage, making this hook reusable for different forms across the application. By passing the initial state as an argument, we can easily reset the form to its original state when needed.
-
+  
   const handleInputChange = (
     event: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement

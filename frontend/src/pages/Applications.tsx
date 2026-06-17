@@ -3,9 +3,18 @@ import { Link } from "react-router-dom";
 import ApplicationTableRow from "../components/ApplicationTableRow";
 import type { Application } from "../data/applications";
 import { useState, useEffect } from "react";
+import {useNavigate} from "react-router-dom";
 
 export default function Applications() {
-  useEffect(() => {
+
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [searchInput, setSearchInput] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | Application["status"]>("all");
+  const [typeFilter, setTypeFilter] = useState<"all" | Application["jobType"]>("all");
+  const [sortOption, setSortOption] = useState<"date-desc" | "date-asc" | "company-asc">("date-desc"); //this means sortoptions has three possible values but initially set to "date-desc"  
+  const navigate=useNavigate();
+
+    useEffect(() => {
     const fetchApplications = async () => {
       try {
         const response = await fetch('http://localhost:5000/applications'); // 1. Fetch data from the backend API
@@ -22,11 +31,6 @@ export default function Applications() {
     };
     fetchApplications();
   }, []);
-  const [applications, setApplications] = useState<Application[]>([]);
-  const [searchInput, setSearchInput] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"all" | Application["status"]>("all");
-  const [typeFilter, setTypeFilter] = useState<"all" | Application["jobType"]>("all");
-  const [sortOption, setSortOption] = useState<"date-desc" | "date-asc" | "company-asc">("date-desc"); //this means sortoptions has three possible values but initially set to "date-desc"  
 
   const filteredApplications = applications.filter((application) => {
     const query = searchInput.toLowerCase();
@@ -70,6 +74,11 @@ export default function Applications() {
     setApplications((prev) =>
       prev.filter((app) => app.id !== id)  //app.id is string but id is number 
     );
+  }
+
+  const editApplication = (id: number) => {
+    // Implement the logic to edit the application with the given id
+    navigate(`/addapplication/${id}`);
   }
 
   return (
@@ -165,7 +174,7 @@ export default function Applications() {
 
         <div className="divide-y divide-slate-100 dark:divide-slate-700">
           {displayedApplications.map((application) => (
-            <ApplicationTableRow key={application.id} application={application} deleteApplication={deleteApplication} />
+            <ApplicationTableRow key={application.id} application={application} deleteApplication={deleteApplication} editApplication={editApplication}/>
           ))}
         </div>
       </div>

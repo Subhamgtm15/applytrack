@@ -3,6 +3,7 @@ import type { Application } from "../data/applications";
 type ApplicationTableRowProps = {
   application: Application;
   deleteApplication: (id: number) => void;
+  editApplication: (id: number) => void;
 };
 
 const statusBadgeClasses: Record<Application["status"], string> = {
@@ -46,7 +47,7 @@ function formatShortDate(date?: string) {
 }
 
 
-export default function ApplicationTableRow({ application,deleteApplication }: ApplicationTableRowProps) {
+export default function ApplicationTableRow({ application,deleteApplication,editApplication }: ApplicationTableRowProps) {
   const avatarColor = getAvatarColor(application.company);
   const companyInitial = application.company.slice(0, 1).toUpperCase();
 
@@ -149,7 +150,7 @@ export default function ApplicationTableRow({ application,deleteApplication }: A
           <button className="rounded-lg p-1 transition hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-700/50 dark:hover:text-slate-200" aria-label={`View ${application.company}`}>
             <Eye className="h-4 w-4" />
           </button>
-          <button className="rounded-lg p-1 transition hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-700/50 dark:hover:text-slate-200" aria-label={`Edit ${application.company}`}>
+          <button onClick={()=>editApplication(application.id)} className="rounded-lg p-1 transition hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-700/50 dark:hover:text-slate-200" aria-label={`Edit ${application.company}`}>
             <Pencil className="h-4 w-4" />
           </button>
           <button onClick={()=>deleteApplication(application.id)} className="rounded-lg p-1 transition hover:bg-slate-100 hover:text-red-500 dark:hover:bg-slate-700/50" aria-label={`Delete ${application.company}`}>
