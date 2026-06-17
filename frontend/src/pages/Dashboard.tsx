@@ -14,7 +14,12 @@ export default function Dashboard() {
     const fetchApplications = async () => {
       try {
         const response = await getAllApplications();;
-        setApplications(response.applications || []); 
+        const normalized = response.applications.map((app: any) => ({
+          ...app,
+          dateApplied: app.date_applied,
+          followUpDate: app.follow_up_date,
+        }));
+        setApplications(normalized || []); 
       } catch (error) {
         console.error('Error fetching data:', error);
       } };  
