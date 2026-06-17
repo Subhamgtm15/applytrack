@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import {sendApplication} from "../services/applicationService";
 import { updateApplication } from "../services/applicationService";
 import { getSpecificApplication } from "../services/applicationService";
+import {useQuery,useQueryClient, useMutation} from "@tanstack/react-query";
 
 //we used object instead of multiple useState hooks to manage the form date in more organized way.
 export default function AddApplication() {
@@ -17,6 +18,22 @@ export default function AddApplication() {
   //edit application 
   const { id } = useParams();
   const editMode = Boolean(id);
+
+  const queryClient = useQueryClient(); // Get the query client instance from React Query
+  
+   const updateMutation = useMutation({ //I receive ONE object, and I unpack it into id and data.
+    mutationFn: ({ id, data }: { id: number; data: Omit<Application, "id"> }) => updateApplication(id, data), // The function that performs the update operation
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["applications"] }); // Invalidate the applications query to refetch the updated list of applications after a successful update
+    },
+  });
+
+  const createMutation = useMutation({
+    mutationFn:(data:Omit<Application,"id">)=>sendApplication(data),
+    onSuccess:()=>{
+      queryClient.invalidateQueries({queryKey:["applications"]});
+    }
+  })
 
   useEffect(() => {
     if (!id) return;
@@ -95,14 +112,11 @@ export default function AddApplication() {
     setErrors({});
 
     //post the form data 
-    let response;
     try {
       if (editMode) {
-        response = await updateApplication(Number(id), formData);
-        console.log(response);
+         updateMutation.mutate({ id: Number(id), data:formData }); 
       } else {
-        response = await sendApplication(formData);
-        console.log(response);
+        createMutation.mutate(formData);
       }
 
       showMessage("Application saved successfully!");

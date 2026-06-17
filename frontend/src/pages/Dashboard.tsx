@@ -10,11 +10,12 @@ import { getAllApplications } from "../services/applicationService";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Dashboard() {
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading } = useQuery<Application[]>({
     queryKey: ["applications"],
     queryFn: getAllApplications,
   });
-  const applications = data ?? [];
+
+  const applications: Application[] = data ?? [];
   // const [applications, setApplications] = useState<Application[]>([]);
   //   useEffect(() => {
   //   const fetchApplications = async () => {

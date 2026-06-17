@@ -16,12 +16,12 @@ export default function Applications() {
   const [sortOption, setSortOption] = useState<"date-desc" | "date-asc" | "company-asc">("date-desc"); //this means sortoptions has three possible values but initially set to "date-desc"  
   const navigate=useNavigate();
 
-  const { data, error, isLoading } = useQuery({
+  const { data, error, isLoading } = useQuery<Application[]>({
     queryKey: ["applications"],
     queryFn: getAllApplications,
   }); // The useQuery hook from React Query is used to fetch the list of applications from the backend. The queryKey is set to ["applications"] to uniquely identify this query, and the queryFn is set to getAllApplications, which is a function that makes an API call to retrieve the applications data. The hook returns an object containing the data, any error that occurred during fetching, and a loading state (isLoading) that indicates whether the data is still being fetched. This allows the component to handle different states (loading, error, and success) accordingly when rendering the UI.
 
-  const applications = data ?? [];
+  const applications:Application[] = data ?? [];
 
   const queryClient = useQueryClient(); // Get the query client instance from React Query
 
