@@ -6,14 +6,15 @@ import Upcoming from "../components/Upcoming";
 import { BadgeCheck, BriefcaseBusiness, ChevronRight, Clock3, CircleX, Handshake } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Link } from "react-router-dom";
+import { getAllApplications } from "../services/applicationService";
+
 export default function Dashboard() {
   const [applications, setApplications] = useState<Application[]>([]);
     useEffect(() => {
     const fetchApplications = async () => {
       try {
-        const response = await fetch('http://localhost:5000/applications'); // 1. Fetch data from the backend <API>
-        const result = await response.json();
-        setApplications(result.applications || []); // 2. Update state with results
+        const response = await getAllApplications();;
+        setApplications(response.applications || []); 
       } catch (error) {
         console.error('Error fetching data:', error);
       } };  

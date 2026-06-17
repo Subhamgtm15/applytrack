@@ -6,6 +6,9 @@ import ErrorMessage from "../components/ErrorMessage";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
+import {sendApplication} from "../services/applicationService";
+import { updateApplication } from "../services/applicationService";
+import { getSpecificApplication } from "../services/applicationService";
 
 //we used object instead of multiple useState hooks to manage the form date in more organized way.
 export default function AddApplication() {
@@ -20,11 +23,7 @@ export default function AddApplication() {
 
     const editApplication = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/applications/${id}`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch application data");
-        }
-        const result = await response.json();
+        const result = await getSpecificApplication(Number(id));
 
         const formatted: Omit<Application, "id"> = {
           company: result.application.company,
@@ -72,7 +71,7 @@ export default function AddApplication() {
   const [errors, setErrors] = useState<Record<string, string>>({}); //object with field as string and message as string 
 
   const { message, showMessage } = useMessage(); //custom hook to show message to user
-  
+
   const submitForm = async (event: React.FormEvent<HTMLFormElement>) => { // This type definition indicates that the function will handle form submission events from an HTML form element.
     event.preventDefault();
     // Define which fields are actually required
@@ -99,34 +98,12 @@ export default function AddApplication() {
     let response;
     try {
       if (editMode) {
-        response = await fetch(`http://localhost:5000/applications/${id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-          }
-        );
+        response = await updateApplication(Number(id), formData);
+        console.log(response);
       } else {
-        response = await fetch("http://localhost:5000/applications",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(formData),
-          }
-        );
+        response = await sendApplication(formData);
+        console.log(response);
       }
-
-
-      if (!response.ok) {
-        throw new Error("Failed to save application");
-      }
-
-      const savedApplication = await response.json();
-      console.log(savedApplication);
 
       showMessage("Application saved successfully!");
       resetForm();

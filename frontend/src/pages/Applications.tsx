@@ -4,6 +4,8 @@ import ApplicationTableRow from "../components/ApplicationTableRow";
 import type { Application } from "../data/applications";
 import { useState, useEffect } from "react";
 import {useNavigate} from "react-router-dom";
+import { deleteOneApplication} from "../services/applicationService";
+import { getAllApplications } from "../services/applicationService";
 
 export default function Applications() {
 
@@ -17,9 +19,8 @@ export default function Applications() {
     useEffect(() => {
     const fetchApplications = async () => {
       try {
-        const response = await fetch('http://localhost:5000/applications'); // 1. Fetch data from the backend API
-        const result = await response.json();
-        const normalized = result.applications.map((app: any) => ({
+        const response = await getAllApplications();;
+        const normalized = response.applications.map((app: any) => ({
           ...app,
           dateApplied: app.date_applied,
           followUpDate: app.follow_up_date,
@@ -61,11 +62,9 @@ export default function Applications() {
     // Implement the logic to delete the application with the given id
 
     try {
-      const response = await fetch(`http://localhost:5000/applications/${id}`, {
-        method: 'DELETE',
-      })
-      const deletedApplication = await response.json();
-      console.log('Deleted application:', deletedApplication.deletedApplication);
+      
+      const response = await deleteOneApplication(id);
+      console.log('Deleted application:', response.deletedApplication);
     }
     catch (error) {
       console.error('Error deleting application:', error);
