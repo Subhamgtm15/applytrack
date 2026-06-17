@@ -6,8 +6,7 @@ import { useState, useEffect } from "react";
 import {useNavigate} from "react-router-dom";
 import { deleteOneApplication} from "../services/applicationService";
 import { getAllApplications } from "../services/applicationService";
-import { useQuery } from "@tanstack/react-query";
-
+import { useQuery,useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function Applications() {
 
@@ -20,8 +19,19 @@ export default function Applications() {
   const { data, error, isLoading } = useQuery({
     queryKey: ["applications"],
     queryFn: getAllApplications,
-  });
+  }); // The useQuery hook from React Query is used to fetch the list of applications from the backend. The queryKey is set to ["applications"] to uniquely identify this query, and the queryFn is set to getAllApplications, which is a function that makes an API call to retrieve the applications data. The hook returns an object containing the data, any error that occurred during fetching, and a loading state (isLoading) that indicates whether the data is still being fetched. This allows the component to handle different states (loading, error, and success) accordingly when rendering the UI.
+
   const applications = data ?? [];
+
+  const queryClient = useQueryClient(); // Get the query client instance from React Query
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteOneApplication, // The function that performs the delete operation
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["applications"] }); // Invalidate the "applications" query to trigger a refetch after a successful deletion
+    },
+  });
+
   if (isLoading) {
   return <div>Loading...</div>;
 }
@@ -47,7 +57,7 @@ if (error) {
   //   fetchApplications();
   // }, []);
 
-  const filteredApplications = applications.filter((application) => {
+  const filteredApplications = applications.filter((application:Application) => {
     const query = searchInput.toLowerCase();
     const matchesSearch =
       application.company.toLowerCase().includes(query) ||
@@ -75,14 +85,15 @@ if (error) {
   const deleteApplication = async (id: number) => {
     // Implement the logic to delete the application with the given id
 
-    try {
-      
-      const response = await deleteOneApplication(id);
-      console.log('Deleted application:', response.deletedApplication);
-    }
-    catch (error) {
-      console.error('Error deleting application:', error);
-    }
+    // try {
+    //   const response = await deleteOneApplication(id);
+    //   console.log('Deleted application:', response.deletedApplication);
+    // }
+    // catch (error) {
+    //   console.error('Error deleting application:', error);
+    // }
+
+      deleteMutation.mutate(id); //
 
     // setApplications((prev) =>
     //   prev.filter((app) => app.id !== id)  //app.id is string but id is number 
