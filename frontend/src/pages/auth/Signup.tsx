@@ -3,13 +3,25 @@ import { useState } from "react";
 import { useMessage } from "../../hooks/useMessage";
 import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../../components/ErrorMessage";
+import { registerUser } from "../../services/api";
+import type { User } from "../../data/user"
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+
 export default function Signup() {
     const navigate = useNavigate();
     const [errors, setErrors] = useState<Record<string, string>>({});
     const { message, showMessage } = useMessage();
+    const queryClient = useQueryClient();
+
+    const createMutation = useMutation({
+        mutationFn: (data: Omit<User, "id">) => registerUser(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["users"] });
+        }
+    })
 
     const { formData, handleInputChange, validate } = useForm({
-        name: "",
+        fullName: "",
         email: "",
         password: "",
     }); // this is the intial state of the form, which is an object with three properties: name, email, and password. The useForm hook will manage the state of this form data.
@@ -17,7 +29,7 @@ export default function Signup() {
     function submitForm(e: React.FormEvent) {
         e.preventDefault();
 
-        const missingFields = validate(["name", "email", "password"]);
+        const missingFields = validate(["fullName", "email", "password"]);
 
         const newErrors: Record<string, string> = {}
 
@@ -30,11 +42,17 @@ export default function Signup() {
             return;
         }
         setErrors({});
-        showMessage("Signup successful! Please login to continue.");
-        setTimeout(() => {
-            navigate("/login");
-        }, 2000); // Navigate to login page after 2 seconds
-            }
+        try {
+            createMutation.mutate(formData);
+            showMessage("Signup successful! Please login to continue.");
+            setTimeout(() => {
+                navigate("/login");
+            }, 2000);
+        }
+        catch (err) {
+            console.error("Error registering user:", err);
+        }
+    }
 
 
     return (
@@ -52,8 +70,8 @@ export default function Signup() {
                     </label>
                     <input
                         type="text"
-                        name="name"
-                        value={formData.name}
+                        name="fullName"
+                        value={formData.fullName}
                         onChange={handleInputChange}
                         className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:border-indigo-400"
                     />
@@ -78,7 +96,7 @@ export default function Signup() {
                     </label>
                     <input type="password" name="password"
                         value={formData.password}
-                            onChange={handleInputChange}
+                        onChange={handleInputChange}
                         className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:border-indigo-400" />
                     <ErrorMessage error={errors.password} />
                 </div>

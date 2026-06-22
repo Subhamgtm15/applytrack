@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
-import { pool } from "./db.js";
+import {pool} from "./db.js";
+import authRoutes from "./routes/auth.routes.js";
 
 const app = express();
 
@@ -10,7 +11,12 @@ app.post("/", (req, res) => {
     res.send("Hello World!");
 
 });
-// Temporary endpoint to test receiving application data
+
+// Use the auth routes for any requests to /auth
+app.use("/auth", authRoutes); 
+
+
+// post new application endpoint
 app.post("/applications", async (req, res) => { // This endpoint will receive the application data from the frontend and save it to the database. We will also add validation to ensure that the required fields are provided and handle any errors that may occur during the database insertion.
     const { company, role, location, jobType, salary, source, status, dateApplied, followUpDate, notes } = req.body;
 

@@ -32,7 +32,7 @@ export default function AddApplication() {
     mutationFn:(data:Omit<Application,"id">)=>sendApplication(data),
     onSuccess:()=>{
       queryClient.invalidateQueries({queryKey:["applications"]});
-    }
+    } 
   })
 
   useEffect(() => {
@@ -98,7 +98,8 @@ export default function AddApplication() {
       "dateApplied",
       "jobType",
     ]);
-    const newErrors: Record<string, string> = {};
+
+    const newErrors: Record<string, string> = {}; // Create a new object to hold error messages for any missing fields
 
     missingFields.forEach((field) => {
       newErrors[field] = `${field} is required`; //transformation of field name to error message, for example if company is missing then it will set newErrors["company"] = "company is required"

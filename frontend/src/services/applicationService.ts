@@ -10,7 +10,7 @@ export const sendApplication = async (formData: Omit<Application, "id">) => {
     throw error; // Rethrow the error to be handled by the caller
   }
 };
-
+ 
 export const updateApplication = async (id: number, formData: Omit<Application, "id">) => {
   try {
     const response = await api.put(`/applications/${id}`, formData);

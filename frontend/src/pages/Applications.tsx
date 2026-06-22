@@ -32,7 +32,7 @@ export default function Applications() {
     },
   });
 
-  if (isLoading) {
+if (isLoading) {
   return <div>Loading...</div>;
 }
 
