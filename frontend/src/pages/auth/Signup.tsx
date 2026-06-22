@@ -4,21 +4,12 @@ import { useMessage } from "../../hooks/useMessage";
 import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../../components/ErrorMessage";
 import { registerUser } from "../../services/api";
-import type { User } from "../../data/user"
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 
 export default function Signup() {
     const navigate = useNavigate();
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const [isLoading, setIsLoading] = useState(false);
     const { message, showMessage } = useMessage();
-    const queryClient = useQueryClient();
-
-    const createMutation = useMutation({
-        mutationFn: (data: Omit<User, "id">) => registerUser(data),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["users"] });
-        }
-    })
 
     const { formData, handleInputChange, validate } = useForm({
         fullName: "",
@@ -26,7 +17,7 @@ export default function Signup() {
         password: "",
     }); // this is the intial state of the form, which is an object with three properties: name, email, and password. The useForm hook will manage the state of this form data.
 
-    function submitForm(e: React.FormEvent) {
+    async function submitForm(e: React.FormEvent) {
         e.preventDefault();
 
         const missingFields = validate(["fullName", "email", "password"]);
@@ -42,15 +33,18 @@ export default function Signup() {
             return;
         }
         setErrors({});
+        setIsLoading(true);
         try {
-            createMutation.mutate(formData);
+            await registerUser(formData);
             showMessage("Signup successful! Please login to continue.");
             setTimeout(() => {
                 navigate("/login");
             }, 2000);
-        }
-        catch (err) {
+        } catch (err) {
             console.error("Error registering user:", err);
+            showMessage("Signup failed. Please try again.");
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -100,8 +94,8 @@ export default function Signup() {
                         className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:border-indigo-400" />
                     <ErrorMessage error={errors.password} />
                 </div>
-                <button type="submit" className="w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 cursor-pointer">
-                    Sign Up
+                <button type="submit" disabled={isLoading} className="w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed">
+                    {isLoading ? "Signing up..." : "Sign Up"}
                 </button>
                 <div className="text-center text-sm text-slate-600 dark:text-slate-400">
                     Already have an account?{" "}
