@@ -14,7 +14,8 @@ router.post("/signup", async (req, res) => {
     const values = [fullName, email, hashedPassword];
     try {
         const result = await pool.query(insertQuery, values);
-        res.status(201).json({ message: 'User registered successfully', user: result.rows[0] });
+        const { password: _, ...safeUser } = result.rows[0];  // Exclude the password from the response
+        res.status(201).json({ message: 'User registered successfully', user: safeUser });
     }
     catch (error:any) {
         if (error.code === '23505') {
