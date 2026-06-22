@@ -6,10 +6,10 @@ import ErrorMessage from "../components/ErrorMessage";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
-import {sendApplication} from "../services/applicationService";
+import { sendApplication } from "../services/applicationService";
 import { updateApplication } from "../services/applicationService";
 import { getSpecificApplication } from "../services/applicationService";
-import {useQuery,useQueryClient, useMutation} from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 
 //we used object instead of multiple useState hooks to manage the form date in more organized way.
 export default function AddApplication() {
@@ -20,8 +20,8 @@ export default function AddApplication() {
   const editMode = Boolean(id);
 
   const queryClient = useQueryClient(); // Get the query client instance from React Query
-  
-   const updateMutation = useMutation({ //I receive ONE object, and I unpack it into id and data.
+
+  const updateMutation = useMutation({ //I receive ONE object, and I unpack it into id and data.
     mutationFn: ({ id, data }: { id: number; data: Omit<Application, "id"> }) => updateApplication(id, data), // The function that performs the update operation
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["applications"] }); // Invalidate the applications query to refetch the updated list of applications after a successful update
@@ -29,10 +29,10 @@ export default function AddApplication() {
   });
 
   const createMutation = useMutation({
-    mutationFn:(data:Omit<Application,"id">)=>sendApplication(data),
-    onSuccess:()=>{
-      queryClient.invalidateQueries({queryKey:["applications"]});
-    } 
+    mutationFn: (data: Omit<Application, "id">) => sendApplication(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["applications"] });
+    }
   })
 
   useEffect(() => {
@@ -55,14 +55,14 @@ export default function AddApplication() {
             ? result.application.follow_up_date.split("T")[0]
             : "",
           notes: result.application.notes,
-        }; 
+        };
         const base = formatted;
 
         setFormData(base);
         setOriginalData(base);
       } catch (error) {
         console.error(error);
-        showMessage("Failed to load application data.");
+        showMessage("Failed to load application data.", "error");
       }
     };
 
@@ -72,7 +72,7 @@ export default function AddApplication() {
 
   //useform is a custom hook that we created to manage form state and handle input changes in a reusable way across different forms in the application. 
   const { formData, setFormData, handleInputChange, resetForm, validate } =
-    useForm<Omit<Application, "id">>({ 
+    useForm<Omit<Application, "id">>({
       company: "",
       role: "",
       location: "",
@@ -115,12 +115,12 @@ export default function AddApplication() {
     //post the form data 
     try {
       if (editMode) {
-         updateMutation.mutate({ id: Number(id), data:formData }); 
+        updateMutation.mutate({ id: Number(id), data: formData });
       } else {
         createMutation.mutate(formData);
       }
 
-      showMessage("Application saved successfully!");
+      showMessage("Application saved successfully!", "success");
       resetForm();
       setTimeout(() => {
         navigate("/applications")
@@ -129,7 +129,7 @@ export default function AddApplication() {
     catch (error) {
       console.error(error);
 
-      showMessage("Failed to save application.");
+      showMessage("Failed to save application.", "error");
     }
   };
   return (
@@ -144,8 +144,8 @@ export default function AddApplication() {
         </p>
       </div>
       {message && (
-        <p className="mb-4 rounded-lg bg-green-50 p-3 text-sm text-green-600 dark:bg-green-900/40 dark:text-green-300">
-          {message}
+        <p className={`mb-4 rounded-lg bg-green-50 p-3 text-sm  ${message?.type === "error" ? "bg-red-50 text-red-600 dark:bg-red-900/40 dark:text-red-300" : "text-green-600 dark:bg-green-900/40 dark:text-green-300"}`}>
+          {message?.text}
         </p>
       )}
 

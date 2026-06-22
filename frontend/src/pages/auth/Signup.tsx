@@ -35,14 +35,10 @@ export default function Signup() {
         setErrors({});
         setIsLoading(true);
         try {
-            await registerUser(formData);
-            showMessage("Signup successful! Please login to continue.");
-            setTimeout(() => {
-                navigate("/login");
-            }, 2000);
-        } catch (err) {
-            console.error("Error registering user:", err);
-            showMessage("Signup failed. Please try again.");
+            const response = await registerUser(formData);
+            showMessage(response.message, "success");
+        } catch (err: any) {
+            showMessage(err.response?.data?.message || "An error occurred", 'error');
         } finally {
             setIsLoading(false);
         }
@@ -54,8 +50,8 @@ export default function Signup() {
             <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-6">Create an account</h1>
             <form className="w-full max-w-md space-y-6 rounded-lg bg-white p-8 shadow-sm dark:bg-slate-800 dark:border dark:border-slate-700" onSubmit={submitForm}>
                 {message && (
-                    <p className="mb-4 rounded-lg bg-green-50 p-3 text-sm text-green-600 dark:bg-green-900/40 dark:text-green-300">
-                        {message}
+                    <p className={`mb-4 rounded-lg bg-green-50 p-3 text-sm  ${message?.type === "error" ? "bg-red-50 text-red-600 dark:bg-red-900/40 dark:text-red-300" : "text-green-600 dark:bg-green-900/40 dark:text-green-300"}`}>
+                        {message?.text}
                     </p>
                 )}
                 <div>

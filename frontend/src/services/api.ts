@@ -10,14 +10,12 @@ const api = axios.create({
 });
 
 export const registerUser = async (formData: Omit<User, "id">) => {
-  try {
     const response = await api.post("/auth/signup", formData);
-    console.log(response.data);
+        console.log(response.data);
     return response.data; // Return the response data to the caller
-  } catch (error) {
-    console.error("Error registering user:", error);
-    throw error; // Rethrow the error to be handled by the caller
-  }
+
 }
 
 export default api;
+
+//one thing i encountered was when we send the message with status code 400, the error is catch by catch block and the message is not shown to the user. To fix this, we can check the error response in the catch block and show the message accordingly.
