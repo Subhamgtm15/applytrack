@@ -12,6 +12,7 @@ const api = axios.create({
 export const registerUser = async (formData: Omit<User, "id">) => {
   try {
     const response = await api.post("/auth/signup", formData);
+    console.log(response.data);
     return response.data; // Return the response data to the caller
   } catch (error) {
     console.error("Error registering user:", error);
