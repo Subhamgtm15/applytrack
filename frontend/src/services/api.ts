@@ -21,5 +21,9 @@ export const loginUser=async(formData:Omit<User,"id"|"fullName">)=>{
     return response.data;
 }
 
+export const logout=async()=>{
+    const response=await api.post("/auth/logout");
+    return response.data;
+}
 export default api;
 

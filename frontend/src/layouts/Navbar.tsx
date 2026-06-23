@@ -1,5 +1,8 @@
 import { Menu, Moon, Sun } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import {logout} from "../services/api";
+import { useState, useEffect, useRef } from "react";
+import {useNavigate} from "react-router-dom";
 type Props = {
   darkMode: boolean;
   toggleTheme: () => void;
@@ -9,14 +12,35 @@ type Props = {
 
 export default function Navbar({ darkMode, toggleTheme, onMenuClick }: Props) {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   const pageTitles: Record<string, string> = {
     "/": "Dashboard",
     "/applications": "Applications",
     "/addapplication": "Add Application",
     "/settings": "Settings"
   }
+  const logoutUser = async () => {
+    try {
+      const response = await logout();
+      console.log(response.message);
+      navigate("/login");
+    } catch (error) {
+      console.error("Error during logout:", error);
+    }
+  };
 
-  // {pathname: "/applications", search: "", hash: "", state: null, key: "default"}
   return (
     <nav className="h-16 w-full sticky top-0 z-50 backdrop-blur bg-white border-b border-slate-200 flex items-center justify-between px-4 lg:px-6 dark:bg-slate-800 dark:border-slate-700 py-3">
 
@@ -52,8 +76,25 @@ export default function Navbar({ darkMode, toggleTheme, onMenuClick }: Props) {
           Welcome
         </span>
 
-        <div className="h-9 w-9 rounded-full bg-indigo-600 text-white flex items-center justify-center text-sm font-semibold dark:bg-indigo-500 ">
-          U
+        {/* Avatar dropdown */}
+        <div className="relative" ref={dropdownRef}>
+          <button
+            onClick={() => setDropdownOpen((prev) => !prev)}
+            className="h-9 w-9 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center text-sm font-semibold dark:bg-indigo-500 dark:hover:bg-indigo-400 transition-colors"
+          >
+            U
+          </button>
+
+          {dropdownOpen && (
+            <div className="absolute right-0 mt-2 w-36 rounded-md shadow-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-1 z-50">
+              <button
+                onClick={() => { setDropdownOpen(false); logoutUser(); }}
+                className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+              >
+                Logout
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
