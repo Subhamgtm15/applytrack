@@ -7,8 +7,9 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials: true,
+  withCredentials: true, // This allows the browser to send cookies along with requests to the backend, which is necessary for session management and authentication.
 });
+
 export const registerUser = async (formData: Omit<User, "id">) => {
     const response = await api.post("/auth/signup", formData);
     return response.data; // Return the response data to the caller
