@@ -7,8 +7,8 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
-
 export const registerUser = async (formData: Omit<User, "id">) => {
     const response = await api.post("/auth/signup", formData);
     return response.data; // Return the response data to the caller

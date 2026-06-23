@@ -14,6 +14,7 @@ export type Application = {
   salary?: string;
   source?: string;
   notes?: string;
+  user_id?: number;
 };
 
 // const applications: Application[] = [
