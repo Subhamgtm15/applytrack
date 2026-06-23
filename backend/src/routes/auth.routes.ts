@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 const router = express.Router();
 
-
+// POST /signup endpoint for user registration
 router.post("/signup", async (req, res) => {
     const { fullName, email, password } = req.body;
     if (!fullName || !email || !password) {
@@ -30,6 +30,8 @@ router.post("/signup", async (req, res) => {
     }
 });
 
+
+// POST /login endpoint for user authentication
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {

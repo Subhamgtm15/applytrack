@@ -14,14 +14,13 @@ app.use(cors({
 
 app.use(express.json());
 app.use(cookieParser());
-app.post("/", (req, res) => {
-    res.send("Hello World!");
 
-});
 
 // Use the auth routes for any requests to /auth
 app.use("/auth", authRoutes);
-app.use("/api", applicationRoutes);
+
+// Use the application routes for any requests to /api
+app.use("/", applicationRoutes);
 
 
 
