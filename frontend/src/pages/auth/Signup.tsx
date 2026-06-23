@@ -41,6 +41,9 @@ export default function Signup() {
             showMessage(err.response?.data?.message || "An error occurred", 'error');
         } finally {
             setIsLoading(false);
+            formData.fullName = "";
+            formData.email = "";
+            formData.password = "";
         }
     }
 

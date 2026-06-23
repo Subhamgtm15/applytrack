@@ -15,5 +15,10 @@ export const registerUser = async (formData: Omit<User, "id">) => {
 
 }
 
+export const loginUser=async(formData:Omit<User,"id"|"fullName">)=>{
+    const response=await api.post("/auth/login",formData);
+    return response.data;
+}
+
 export default api;
 
