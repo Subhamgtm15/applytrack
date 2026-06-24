@@ -34,7 +34,7 @@ export default function Settings() {
       </div>
       {message && (
         <p className="mb-4 rounded-lg bg-green-50 p-3 text-sm text-green-600 dark:bg-green-900/40 dark:text-green-300">
-          {message}
+          {message.text}
         </p>
       )}
 

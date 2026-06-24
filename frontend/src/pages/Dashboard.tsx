@@ -132,7 +132,7 @@ export default function Dashboard() {
 
   // take only top 3
   const upcomingInterviews = sortedUpcoming.slice(0, 3);
-  // console.log(upcomingInterviews);
+
   return (
     <section id="center ">
 

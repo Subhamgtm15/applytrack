@@ -1,33 +1,19 @@
-import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { fetchCurrentUser } from "../services/api";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 type ProtectedRouteProps = {
-  children: React.ReactNode; // the children prop represents the components that will be rendered if the user is authenticated
+  children: React.ReactNode;
 };
 
-export default function ProtectedRoute({children}: ProtectedRouteProps) {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+export default function ProtectedRoute({ children }: ProtectedRouteProps) {
+  const auth = useContext(AuthContext);
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        await fetchCurrentUser(); 
-        setIsAuthenticated(true);
-      } catch (error) {
-        setIsAuthenticated(false);
-      }
-    };
-    checkAuth();
-  }, []);
+  if (auth?.loading) {
+  return <div>Loading...</div>;
+}
 
-  if (isAuthenticated === null) {
-    return <div>Loading...</div>;
-  }
-
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
+  if (!auth?.user) return <Navigate to="/login" replace />;
 
   return <>{children}</>;
 }

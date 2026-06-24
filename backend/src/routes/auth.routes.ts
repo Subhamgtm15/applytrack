@@ -74,10 +74,14 @@ router.post("/login", async (req, res) => {
     }
 })
 
+
+// POST /logout endpoint for user logout
+
 router.post("/logout", (req, res) => {
     res.clearCookie("token");
     res.status(200).json({ message: "Logout successful" });
 });
+
 
 // GET /me - fetch the currently logged-in user
 router.get("/me", authMiddleware, async (req: AuthRequest, res) => {

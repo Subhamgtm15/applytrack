@@ -120,4 +120,5 @@ router.put("/applications/:id", async (req:AuthRequest, res) => {
     }
 });
 
+
 export default router;

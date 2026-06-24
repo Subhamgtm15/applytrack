@@ -2,8 +2,9 @@ import { Menu, Moon, Sun } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { logout } from "../services/api";
 import { fetchCurrentUser } from "../services/api";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext} from "react";
 import { useNavigate } from "react-router-dom";
+import {AuthContext} from "../context/AuthContext";
 type Props = {
   darkMode: boolean;
   toggleTheme: () => void;
@@ -12,7 +13,6 @@ type Props = {
 
 
 export default function Navbar({ darkMode, toggleTheme, onMenuClick }: Props) {
-  const [fullName, setFullName] = useState<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -47,18 +47,22 @@ export default function Navbar({ darkMode, toggleTheme, onMenuClick }: Props) {
   };
 
   // Fetch the current user's full name when the component mounts
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await fetchCurrentUser();
-        setFullName(response.user.fullName);
-      }
-      catch (error) {
-        console.error("Error fetching user:", error);
-      }
-    };
-    fetchUser();
-  }, []);
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const response = await fetchCurrentUser();
+  //       setFullName(response.user.fullName);
+  //     }
+  //     catch (error) {
+  //       console.error("Error fetching user:", error);
+  //     }
+  //   };
+  //   fetchUser();
+  // }, []);
+
+  const auth = useContext(AuthContext);
+  const fullName = auth?.user?.fullName || "";
+  const firstName = fullName.split(" ")[0];
 
 
   return (
@@ -93,7 +97,7 @@ export default function Navbar({ darkMode, toggleTheme, onMenuClick }: Props) {
           )}
         </button>
         <span className="hidden sm:block text-xs text-slate-500 dark:text-slate-400">
-          Welcome
+          Welcome{firstName ? `, ${firstName}` : ""}
         </span>
 
         {/* Avatar dropdown */}
@@ -102,7 +106,7 @@ export default function Navbar({ darkMode, toggleTheme, onMenuClick }: Props) {
             onClick={() => setDropdownOpen((prev) => !prev)}
             className="h-9 w-9 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center text-sm font-semibold dark:bg-indigo-500 dark:hover:bg-indigo-400 transition-colors"
           >
-            {fullName ? fullName.charAt(0).toUpperCase() : ""}
+            {firstName ? firstName.charAt(0).toUpperCase() : ""}
           </button>
 
           {dropdownOpen && (
