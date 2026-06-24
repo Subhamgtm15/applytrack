@@ -1,7 +1,9 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { pool } from "../db"
+import { pool } from "../db";
+import { authMiddleware } from "../middlewares/auth.middleware";
+import { AuthRequest } from "../types/authRequest";
 import dotenv from "dotenv";
 dotenv.config();
 const router = express.Router();
@@ -52,17 +54,17 @@ router.post("/login", async (req, res) => {
             return res.status(401).json({ message: "Invalid email or password" });
         }
         // Generate JWT token
-        const token = jwt.sign(
+        const jwtToken = jwt.sign(
             { userId: user.user_id },
             process.env.JWT_SECRET as string,
             { expiresIn: "1h" }
         );
         // Set the token in an HTTP-only cookie
-        res.cookie("token", token, {
-            httpOnly: true,
-            secure: false,
+        res.cookie("token", jwtToken, {
+            httpOnly: true, // prevents client-side JavaScript from accessing the cookie
+            secure: false, //for local development false is fine, set to true in production with HTTPS
             sameSite: "lax",
-            maxAge: 60 * 60 * 1000, 
+            maxAge: 60 * 60 * 1000, //browser delete cookie time
         });
         return res.status(200).json({ message: "Login successful" });
     }
@@ -75,6 +77,21 @@ router.post("/login", async (req, res) => {
 router.post("/logout", (req, res) => {
     res.clearCookie("token");
     res.status(200).json({ message: "Logout successful" });
+});
+
+// GET /me - fetch the currently logged-in user
+router.get("/me", authMiddleware, async (req: AuthRequest, res) => {
+    const userId = req.user.userId;
+    const selectQuery = `SELECT "fullName" FROM users WHERE user_id = $1`;
+    try {
+        const result = await pool.query(selectQuery, [userId]);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        res.status(200).json({ message: "user found", user:result.rows[0] });
+    } catch (error) {
+        res.status(500).json({ error: "An error occurred while fetching the user" });
+    }
 });
 
 export default router;
