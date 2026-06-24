@@ -4,7 +4,7 @@ import { logout } from "../services/api";
 import { fetchCurrentUser } from "../services/api";
 import { useState, useEffect, useRef, useContext} from "react";
 import { useNavigate } from "react-router-dom";
-import {AuthContext} from "../context/AuthContext";
+import {AuthContext} from "../provider/AuthContext";
 type Props = {
   darkMode: boolean;
   toggleTheme: () => void;
@@ -43,6 +43,9 @@ export default function Navbar({ darkMode, toggleTheme, onMenuClick }: Props) {
       navigate("/login");
     } catch (error) {
       console.error("Error during logout:", error);
+    }
+    finally{
+      auth?.clearUser(); // Clear the user from context after logout
     }
   };
 

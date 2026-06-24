@@ -1,15 +1,18 @@
 import { useForm } from "../../hooks/useForm";
-import { useState } from "react";
+import { useState,useContext } from "react";
 import { useMessage } from "../../hooks/useMessage";
 import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../../components/ErrorMessage";
 import { loginUser } from "../../services/api";
+import {fetchCurrentUser} from "../../services/api";
+import { AuthContext } from "../../provider/AuthContext";
 
 export default function Signup() {
   const navigate = useNavigate();
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const { message, showMessage } = useMessage();
+  const auth = useContext(AuthContext);
 
   const { formData, handleInputChange, validate } = useForm({
     email: "",
@@ -36,6 +39,8 @@ export default function Signup() {
     try {
       const response = await loginUser(formData);
       showMessage(response.message, "success");
+      const userResponse = await fetchCurrentUser();
+      auth?.setUser(userResponse.user);
       navigate("/");
     } catch (err: any) {
       showMessage(err.response?.data?.message || "An error occurred", 'error');

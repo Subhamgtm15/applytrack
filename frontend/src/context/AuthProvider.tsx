@@ -1,16 +1,9 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { fetchCurrentUser } from '../services/api';
+import type{ User } from '../provider/AuthContext';
+import { AuthContext } from '../provider/AuthContext';
 
-interface User {
-    fullName: string;
-}
 
-interface AuthContextType {
-    user: User | null;
-    loading: boolean;
-}
-
-export const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({children}: {children: React.ReactNode}) {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
@@ -24,15 +17,18 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
             }
             catch (error) {
                 console.error("Error fetching user:", error);
-                setUser(null);
                 setLoading(false);
             }
         };
         fetchUser();
-    }, []);
+    }, []);  //don't put user in the dependency array, otherwise it will cause an infinite loop
+
+    const clearUser=()=>{
+        setUser(null);
+    }
 
     return (
-        <AuthContext.Provider value={{user,loading}}>
+        <AuthContext.Provider value={{user,setUser,loading,clearUser}}>
             {children}
         </AuthContext.Provider>
     )
