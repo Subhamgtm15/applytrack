@@ -7,13 +7,14 @@ import AddApplication from './pages/AddApplication'
 import Settings from './pages/Settings'
 import Signup from './pages/auth/Signup';
 import Login from './pages/auth/Login';
+import ProtectedRoute from './components/ProtectedRoute';
 
 export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
-      <Route element={<MainLayout />}>
+      <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
         <Route path="/" element={<Dashboard />} />
         <Route path="/applications" element={<Applications />} />
         <Route path="/addapplication" element={<AddApplication />} />
