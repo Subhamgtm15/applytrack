@@ -36,6 +36,7 @@ export default function Signup() {
     try {
       const response = await loginUser(formData);
       showMessage(response.message, "success");
+      navigate("/");
     } catch (err: any) {
       showMessage(err.response?.data?.message || "An error occurred", 'error');
     } finally {

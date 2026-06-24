@@ -25,5 +25,10 @@ export const logout=async()=>{
     const response=await api.post("/auth/logout");
     return response.data;
 }
+
+export const fetchCurrentUser=async()=>{
+    const response=await api.get("/auth/me");
+    return response.data;
+}
 export default api;
 

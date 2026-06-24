@@ -1,8 +1,9 @@
 import { Menu, Moon, Sun } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
-import {logout} from "../services/api";
+import { useLocation } from "react-router-dom";
+import { logout } from "../services/api";
+import { fetchCurrentUser } from "../services/api";
 import { useState, useEffect, useRef } from "react";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 type Props = {
   darkMode: boolean;
   toggleTheme: () => void;
@@ -11,6 +12,7 @@ type Props = {
 
 
 export default function Navbar({ darkMode, toggleTheme, onMenuClick }: Props) {
+  const [fullName, setFullName] = useState<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -25,12 +27,15 @@ export default function Navbar({ darkMode, toggleTheme, onMenuClick }: Props) {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
   const pageTitles: Record<string, string> = {
     "/": "Dashboard",
     "/applications": "Applications",
     "/addapplication": "Add Application",
     "/settings": "Settings"
   }
+  
+  // Function to handle user logout
   const logoutUser = async () => {
     try {
       const response = await logout();
@@ -40,6 +45,21 @@ export default function Navbar({ darkMode, toggleTheme, onMenuClick }: Props) {
       console.error("Error during logout:", error);
     }
   };
+
+  // Fetch the current user's full name when the component mounts
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await fetchCurrentUser();
+        setFullName(response.user.fullName);
+      }
+      catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+    fetchUser();
+  }, []);
+
 
   return (
     <nav className="h-16 w-full sticky top-0 z-50 backdrop-blur bg-white border-b border-slate-200 flex items-center justify-between px-4 lg:px-6 dark:bg-slate-800 dark:border-slate-700 py-3">
@@ -82,7 +102,7 @@ export default function Navbar({ darkMode, toggleTheme, onMenuClick }: Props) {
             onClick={() => setDropdownOpen((prev) => !prev)}
             className="h-9 w-9 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white flex items-center justify-center text-sm font-semibold dark:bg-indigo-500 dark:hover:bg-indigo-400 transition-colors"
           >
-            U
+            {fullName ? fullName.charAt(0).toUpperCase() : ""}
           </button>
 
           {dropdownOpen && (
