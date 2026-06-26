@@ -36,10 +36,11 @@ export default function Dashboard() {
   const endOfCurrentWeek = new Date();
   endOfCurrentWeek.setHours(0, 0, 0, 0); //Remove Time Part
 
-  const weeklyInterviewActivity = Array.from({ length: 6 }, (_, index) => { // _ is a common convention to indicate that we don't care about the first argument (the value) when creating an array with Array.from. We only care about the index, which we use to calculate the week range.
+  const weeklyInterviewActivity = Array.from({ length: 6 }, (_, index) => { 
+    // _ is a common convention to indicate that we don't care about first ag. with is value because it is anyway undefined. we only care about the index, which is the second argument of the callback function. The index will be 0 for the first week (5 weeks ago), 1 for the second week (4 weeks ago)
 
     // we create an array of 6 weeks (current week + previous 5 weeks) and map over it to calculate the interview count for each week.
-    const weekEnd = new Date(endOfCurrentWeek); //
+    const weekEnd = new Date(endOfCurrentWeek); 
     weekEnd.setDate(endOfCurrentWeek.getDate() - (5 - index) * 7); // calculate the end date for each week by subtracting the appropriate number of days from the end of the current week. For index 0, we subtract 35 days (5 weeks), for index 1 we subtract 28 days (4 weeks), and so on until index 5 which is the current week with no subtraction.
 
     const weekStart = new Date(weekEnd);
@@ -50,8 +51,9 @@ export default function Dashboard() {
       if (app.status !== "interview") {
         return false;
       }
+      console.log(app.dateApplied);
 
-      const appliedDate = new Date(`${app.dateApplied}T00:00:00`);
+      const appliedDate = new Date(app.dateApplied);
       return appliedDate >= weekStart && appliedDate <= weekEnd;
     }).length; // For each of the last 6 weeks, we calculate that week's start and end dates, then scan all applications and count how many interview applications fall within that week's date range.
 
@@ -63,6 +65,7 @@ export default function Dashboard() {
       isCurrentWeek: index === 5,
     };
   });
+ 
 
   const recentApplications = [...applications]
     .sort((firstApp, secondApp) => {
@@ -150,7 +153,7 @@ export default function Dashboard() {
           <div className="mb-6 flex items-start justify-between gap-4">
             <div>
               <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">Application Activity</h2>
-              <p className="mt-1 text-sm leading-6 text-slate-500 dark:text-slate-400">Interview applications grouped by week using the dateApplied field</p>
+              <p className="mt-1 text-sm leading-6 text-slate-500 dark:text-slate-400">Interview applications grouped by week</p>
             </div>
             <div className="rounded-full bg-purple-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-purple-700 dark:bg-purple-900/40 dark:text-purple-300">
               Week wise
@@ -168,7 +171,7 @@ export default function Dashboard() {
                     dataKey="label"
                     tickLine={false}
                     axisLine={false}
-                    tick={{ fill: "#64748b", fontSize: 12 }}
+                    tick={{ fill: "#64748b", fontSize: 10 }}
                   />
                   <YAxis
                     allowDecimals={false}

@@ -10,6 +10,7 @@ import { sendApplication } from "../services/applicationService";
 import { updateApplication } from "../services/applicationService";
 import { getSpecificApplication } from "../services/applicationService";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { RollerCoaster } from "lucide-react";
 
 //we used object instead of multiple useState hooks to manage the form date in more organized way.
 export default function AddApplication() {
@@ -95,6 +96,7 @@ export default function AddApplication() {
     const missingFields = validate([
       "company",
       "location",
+      "role",
       "dateApplied",
       "jobType",
     ]);

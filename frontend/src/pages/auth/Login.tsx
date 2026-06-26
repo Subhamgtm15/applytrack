@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../../components/ErrorMessage";
 import { loginUser } from "../../services/api";
 import {fetchCurrentUser} from "../../services/api";
-import { AuthContext } from "../../provider/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function Signup() {
   const navigate = useNavigate();
