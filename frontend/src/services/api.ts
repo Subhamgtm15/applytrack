@@ -11,7 +11,7 @@ const api = axios.create({
 
 export const registerUser = async (formData: Omit<User, "id">) => {
     const response = await api.post("/auth/signup", formData);
-    return response.data; // Return the response data to the caller
+    return response.data; 
 }
 
 export const loginUser=async(formData:Omit<User,"id"|"fullName">)=>{
@@ -27,6 +27,10 @@ export const logout=async()=>{
 export const fetchCurrentUser=async()=>{
     const response=await api.get("/auth/me");
     return response.data;
+}
+
+export const signInWithGoogle = () => {
+    window.location.href = "http://localhost:5000/auth/google";
 }
 export default api;
 

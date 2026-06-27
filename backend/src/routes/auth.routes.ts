@@ -1,6 +1,7 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import passport from "passport";
 import { pool } from "../db";
 import { authMiddleware } from "../middlewares/auth.middleware";
 import { AuthRequest } from "../types/authRequest";
@@ -97,5 +98,39 @@ router.get("/me", authMiddleware, async (req: AuthRequest, res) => {
         res.status(500).json({ error: "An error occurred while fetching the user" });
     }
 });
+
+//start the Google OAuth flow
+// this is the middelware that will redirect the user to google login page
+router.get("/google", passport.authenticate("google", {
+    scope: ["profile", "email"],
+}));
+
+//handle the callback from Google after authentication
+router.get(
+    "/google/callback",
+    passport.authenticate("google", {
+        session: false,
+        failureRedirect: "http://localhost:5173/login",
+    }),
+    (req, res) => {
+        const user = req.user as any;
+
+        const jwtToken = jwt.sign(
+            { userId: user.user_id },
+            process.env.JWT_SECRET as string,
+            { expiresIn: "1h" }
+        );
+
+        res.cookie("token", jwtToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax",
+            maxAge: 60 * 60 * 1000,
+        });
+
+        // redirect back to the frontend
+        res.redirect("http://localhost:5173");
+    }
+);
 
 export default router;

@@ -1,5 +1,6 @@
 import { Eye, MapPin, Pencil, Trash2, Calendar, Briefcase, DollarSign } from "lucide-react";
 import type { Application } from "../data/applications";
+import { updateApplication } from "../services/applicationService";
 type ApplicationTableRowProps = {
   application: Application;
   deleteApplication: (id: number) => void;
@@ -105,10 +106,10 @@ export default function ApplicationTableRow({ application,deleteApplication,edit
           <button className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-700" aria-label={`View ${application.company}`}>
             <Eye className="h-3.5 w-3.5" /> View
           </button>
-          <button className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-700" aria-label={`Edit ${application.company}`}>
+          <button onClick={()=>editApplication(application.id)} className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-700" aria-label={`Edit ${application.company}`}>
             <Pencil className="h-3.5 w-3.5" /> Edit
           </button>
-          <button className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-red-500 transition hover:bg-red-50 dark:border-slate-700 dark:text-red-400 dark:hover:bg-red-900/20" aria-label={`Delete ${application.company}`}>
+          <button onClick={()=>deleteApplication(application.id)} className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-red-500 transition hover:bg-red-50 dark:border-slate-700 dark:text-red-400 dark:hover:bg-red-900/20" aria-label={`Delete ${application.company}`}>
             <Trash2 className="h-3.5 w-3.5" /> Delete
           </button>
         </div>

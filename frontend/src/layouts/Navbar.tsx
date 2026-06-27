@@ -1,10 +1,9 @@
 import { Menu, Moon, Sun } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { logout } from "../services/api";
-import { fetchCurrentUser } from "../services/api";
 import { useState, useEffect, useRef, useContext} from "react";
 import { useNavigate } from "react-router-dom";
-import {AuthContext} from "../provider/AuthContext";
+import {AuthContext} from "../context/AuthContext";
 type Props = {
   darkMode: boolean;
   toggleTheme: () => void;
@@ -38,14 +37,11 @@ export default function Navbar({ darkMode, toggleTheme, onMenuClick }: Props) {
   // Function to handle user logout
   const logoutUser = async () => {
     try {
-      const response = await logout();
-      console.log(response.message);
+      await logout();
+      auth?.clearUser();
       navigate("/login");
     } catch (error) {
       console.error("Error during logout:", error);
-    }
-    finally{
-      auth?.clearUser(); // Clear the user from context after logout
     }
   };
 

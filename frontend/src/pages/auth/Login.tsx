@@ -6,6 +6,7 @@ import ErrorMessage from "../../components/ErrorMessage";
 import { loginUser } from "../../services/api";
 import {fetchCurrentUser} from "../../services/api";
 import { AuthContext } from "../../context/AuthContext";
+import {signInWithGoogle} from "../../services/api";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -89,6 +90,12 @@ export default function Signup() {
           Don't have an account?{" "}
           <span className="text-indigo-600 hover:text-indigo-700 cursor-pointer font-medium" onClick={() => navigate("/signup")}>
             Sign Up
+          </span>
+        </div>
+        <div className="text-center text-sm text-slate-600 dark:text-slate-400">
+          Or sign in with{" "}
+          <span className="text-indigo-600 hover:text-indigo-700 cursor-pointer font-medium" onClick={signInWithGoogle}>
+            Google
           </span>
         </div>
 

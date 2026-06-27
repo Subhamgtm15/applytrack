@@ -48,10 +48,7 @@ export default function Dashboard() {
 
 
     const count = applications.filter((app) => {
-      if (app.status !== "interview") {
-        return false;
-      }
-      console.log(app.dateApplied);
+  
 
       const appliedDate = new Date(app.dateApplied);
       return appliedDate >= weekStart && appliedDate <= weekEnd;
@@ -65,7 +62,6 @@ export default function Dashboard() {
       isCurrentWeek: index === 5,
     };
   });
- 
 
   const recentApplications = [...applications]
     .sort((firstApp, secondApp) => {
@@ -153,7 +149,7 @@ export default function Dashboard() {
           <div className="mb-6 flex items-start justify-between gap-4">
             <div>
               <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">Application Activity</h2>
-              <p className="mt-1 text-sm leading-6 text-slate-500 dark:text-slate-400">Interview applications grouped by week</p>
+              <p className="mt-1 text-sm leading-6 text-slate-500 dark:text-slate-400">Applications submitted per week</p>
             </div>
             <div className="rounded-full bg-purple-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-purple-700 dark:bg-purple-900/40 dark:text-purple-300">
               Week wise
@@ -186,7 +182,7 @@ export default function Dashboard() {
                       border: "1px solid #e2e8f0",
                       boxShadow: "0 8px 24px rgba(15, 23, 42, 0.08)",
                     }}
-                    formatter={(value) => [`${value ?? 0} interviews`, "Count"]}
+                    formatter={(value) => [`${value ?? 0} applications`, "Count"]}
                     labelFormatter={(_, payload) => payload?.[0]?.payload?.rangeLabel ?? ""}
                   />
                   <Bar dataKey="count" fill="#8b5cf6" radius={[14, 14, 0, 0]} maxBarSize={44} />
