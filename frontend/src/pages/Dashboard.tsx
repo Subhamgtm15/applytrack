@@ -156,12 +156,31 @@ export default function Dashboard() {
     (app) => app.status === "interview"
   ).length;
 
+  // count only upcoming follow-ups (reuse validUpcoming) for the Follow-ups card subtitle
+  const upcomingFollowUpCount = validUpcoming.filter(
+    (app) => app.status === "follow-up"
+  ).length;
+  const followUpSubtitle = (
+    <span className={upcomingFollowUpCount > 0 ? "text-yellow-600 dark:text-yellow-300" : "text-slate-500 dark:text-slate-400"}>
+      {upcomingFollowUpCount > 0 ? `${upcomingFollowUpCount} due soon` : "None due soon"}
+    </span>
+  );
+
   // Offers card subtitle: "Active" (green) when there is at least one offer, otherwise neutral
   const hasOffers = statusCount.offer > 0;
   const offerSubtitle = (
     <span className={hasOffers ? "text-emerald-600 dark:text-emerald-300" : "text-slate-500 dark:text-slate-400"}>
       {hasOffers ? "Active" : "None yet"}
     </span>
+  );
+
+  // Rejections card subtitle: rejection rate as a share of all applications
+  const rejectionRate =
+    applications.length > 0
+      ? Math.round((statusCount.rejected / applications.length) * 100)
+      : 0;
+  const rejectionSubtitle = (
+    <span className="text-slate-500 dark:text-slate-400">{`${rejectionRate}% of total`}</span>
   );
 
   return (
@@ -171,8 +190,8 @@ export default function Dashboard() {
         <StatCard title="Total Applied" value={applications.length} subtitle={appliedSubtitle} icon={BriefcaseBusiness} iconBg="bg-blue-100 text-blue-600" />
         <StatCard title="Interviews" value={statusCount.interview} subtitle={`${upcomingInterviewCount} upcoming`} icon={Handshake} iconBg="bg-purple-100 text-purple-600" />
         <StatCard title="Offers" value={statusCount.offer} subtitle={offerSubtitle} icon={BadgeCheck} iconBg="bg-green-100 text-green-600" />
-        <StatCard title="Rejections" value={statusCount.rejected} subtitle="" icon={CircleX} iconBg="bg-red-100 text-red-600" />
-        <StatCard title="Follow-ups" value={statusCount['follow-up']} subtitle="Due soon" icon={Clock3} iconBg="bg-yellow-100 text-yellow-600" />
+        <StatCard title="Rejections" value={statusCount.rejected} subtitle={rejectionSubtitle} icon={CircleX} iconBg="bg-red-100 text-red-600" />
+        <StatCard title="Follow-ups" value={statusCount['follow-up']} subtitle={followUpSubtitle} icon={Clock3} iconBg="bg-yellow-100 text-yellow-600" />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-6">
 
