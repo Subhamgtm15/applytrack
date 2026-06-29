@@ -1,9 +1,10 @@
+import type { ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
 
 type StatCardProps = {
   title: string;
   value: number;
-  subtitle: string;
+  subtitle: ReactNode; // can be plain text or a custom node (e.g. an arrow + colored text)
   icon: LucideIcon;
     iconBg?: string; // optional prop for background color of the icon container. you see that ? mark
 };
@@ -15,7 +16,7 @@ export default function StatCard({ title, value, subtitle, icon: LucideIcon, ico
                         <div className="min-w-0 space-y-2">
                             <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{title}</p>
                             <p className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">{value}</p>
-                            <p className="text-sm font-medium text-emerald-600 dark:text-emerald-300">{subtitle}</p>
+                            <div className="text-sm font-medium text-emerald-600 dark:text-emerald-300">{subtitle}</div>
                 </div>
                 <div className={`shrink-0 rounded-2xl p-3 ${iconBg ?? "bg-slate-100 text-slate-700"}`}>
                     <LucideIcon className="h-5 w-5" />

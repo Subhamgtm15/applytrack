@@ -30,7 +30,7 @@ export const fetchCurrentUser=async()=>{
 }
 
 export const signInWithGoogle = () => {
-    window.location.href = "http://localhost:5000/auth/google";
+    window.location.href = `${api.defaults.baseURL}/auth/google`;
 }
 export default api;
 

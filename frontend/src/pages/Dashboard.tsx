@@ -3,7 +3,7 @@ import type { Application } from "../data/applications";
 import RecentApplicationRow from "../components/RecentApplicationRow";
 import StatCard from "../components/StatCard";
 import Upcoming from "../components/Upcoming";
-import { BadgeCheck, BriefcaseBusiness, ChevronRight, Clock3, CircleX, Handshake } from "lucide-react";
+import { ArrowDown, ArrowUp, BadgeCheck, BriefcaseBusiness, ChevronRight, Clock3, CircleX, Handshake } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Link } from "react-router-dom";
 import { getAllApplications } from "../services/applicationService";
@@ -62,6 +62,25 @@ export default function Dashboard() {
       isCurrentWeek: index === 5,
     };
   });
+
+  // Reuse the weekly counts already computed above: index 5 is the current week, index 4 the previous week
+  const thisWeekApplied = weeklyInterviewActivity[5].count;
+  const lastWeekApplied = weeklyInterviewActivity[4].count;
+
+  const appliedDiff = thisWeekApplied - lastWeekApplied;
+  const appliedTrendColor =
+    appliedDiff > 0
+      ? "text-emerald-600 dark:text-emerald-300"
+      : appliedDiff < 0
+        ? "text-red-600 dark:text-red-400"
+        : "text-slate-500 dark:text-slate-400"; // same count both weeks -> neutral
+  const appliedSubtitle = (
+    <span className={`flex items-center gap-1 ${appliedTrendColor}`}>
+      {appliedDiff > 0 && <ArrowUp className="h-4 w-4" />}
+      {appliedDiff < 0 && <ArrowDown className="h-4 w-4" />}
+      {`${appliedDiff > 0 ? "+" : ""}${appliedDiff} this week`}
+    </span>
+  );
 
   const recentApplications = [...applications]
     .sort((firstApp, secondApp) => {
@@ -136,7 +155,7 @@ export default function Dashboard() {
     <section id="center ">
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
-        <StatCard title="Total Applied" value={applications.length} subtitle="+3 this week" icon={BriefcaseBusiness} iconBg="bg-blue-100 text-blue-600" />
+        <StatCard title="Total Applied" value={applications.length} subtitle={appliedSubtitle} icon={BriefcaseBusiness} iconBg="bg-blue-100 text-blue-600" />
         <StatCard title="Interviews" value={statusCount.interview} subtitle="2 upcoming" icon={Handshake} iconBg="bg-purple-100 text-purple-600" />
         <StatCard title="Offers" value={statusCount.offer} subtitle="Active" icon={BadgeCheck} iconBg="bg-green-100 text-green-600" />
         <StatCard title="Rejections" value={statusCount.rejected} subtitle="" icon={CircleX} iconBg="bg-red-100 text-red-600" />
