@@ -1,19 +1,37 @@
+import { useContext, useEffect } from "react";
 import type { userData } from "../data/userData";
 import { useForm } from "../hooks/useForm";
 import { useMessage } from "../hooks/useMessage";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Settings() {
   // Similar to AddApplication, we use the useForm hook here to manage the state of the user profile form. 
-  const { formData, handleInputChange } = useForm<userData>({
-    firstName: "Alex",
-    lastName: "Morgan",
-    email: "alex@example.com",
-    currentRole: "Frontend Engineer",
-    targetRole: "Staff / Principal Engineer",
-    linkedin: "linkedin.com/in/alexmorgan",
+  const { formData, setFormData, handleInputChange } = useForm<userData>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    currentRole: "",
+    targetRole: "",
+    linkedin: "",
   });
 
   const { message, showMessage } = useMessage(); //useMessage is a custom hook to show temporary messages to the user, such as success or error notifications. In this case, we can use it to show a success message when the profile is saved successfully.
+
+  // Reuse the user already loaded into AuthContext (fetched once on app mount) instead of re-fetching.
+  const auth = useContext(AuthContext);
+
+  useEffect(() => {
+    if (!auth?.user) return;
+    // The users table stores a single "fullName", so we split it into first/last for the form.
+    const [firstName, ...rest] = (auth.user.fullName ?? "").trim().split(" ");
+    setFormData((prev) => ({
+      ...prev,
+      firstName: firstName ?? "",
+      lastName: rest.join(" "),
+      email: auth.user!.email ?? "",
+    }));
+  }, [auth?.user, setFormData]);
+
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
     showMessage("Profile saved successfully!"); // Show success message to user
@@ -71,8 +89,8 @@ export default function Settings() {
           <input
             name="email"
             value={formData.email}
-            onChange={handleInputChange}
-            className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:border-indigo-400"
+            readOnly
+            className="mt-1 w-full cursor-not-allowed rounded-lg border border-slate-300 bg-slate-100 px-4 py-2.5 text-slate-500 outline-none dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400"
           />
         </div>
 

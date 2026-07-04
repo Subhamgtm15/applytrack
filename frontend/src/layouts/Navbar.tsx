@@ -112,7 +112,7 @@ export default function Navbar({ darkMode, toggleTheme, onMenuClick }: Props) {
             <div className="absolute right-0 mt-2 w-36 rounded-md shadow-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-1 z-50">
               <button
                 onClick={() => { setDropdownOpen(false); logoutUser(); }}
-                className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                className="w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-slate-100 dark:text-red-400 dark:hover:bg-slate-700 transition-colors"
               >
                 Logout
               </button>

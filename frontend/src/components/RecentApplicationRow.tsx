@@ -47,18 +47,18 @@ export default function RecentApplicationRow({ application }: RecentApplicationR
         </div>
       </div>
 
-      <div className="flex items-center justify-between gap-4 md:justify-end">
+      <div className="flex items-center gap-3 pl-[3.625rem] md:gap-4 md:pl-0 md:justify-end">
         <span className={`rounded-full px-3 py-1 text-xs font-semibold capitalize ring-1 ${statusBadgeClasses[application.status]}`}>
           {application.status}
         </span>
-        <span className="min-w-24 text-[13px] font-medium text-slate-500 dark:text-slate-400">
+        <span className="text-[13px] font-medium text-slate-500 dark:text-slate-400 md:min-w-24">
           {new Date(application.dateApplied).toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",
             year: "numeric",
           })}
         </span>
-        <ChevronRight className="h-4 w-4 shrink-0 text-slate-400 dark:text-slate-500" />
+        <ChevronRight className="hidden h-4 w-4 shrink-0 text-slate-400 md:block dark:text-slate-500" />
       </div>
     </div>
   );

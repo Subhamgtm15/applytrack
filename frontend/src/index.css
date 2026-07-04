@@ -2,6 +2,23 @@
 
 :root {
   font-family: "Inter", sans-serif;
+
+  /* Chart (recharts) colors — adapt to theme since recharts uses inline values */
+  --chart-grid: #e2e8f0;
+  --chart-axis: #64748b;
+  --chart-axis-muted: #94a3b8;
+  --chart-tooltip-bg: #ffffff;
+  --chart-tooltip-border: #e2e8f0;
+  --chart-tooltip-text: #0f172a;
+}
+
+.dark {
+  --chart-grid: #334155;
+  --chart-axis: #94a3b8;
+  --chart-axis-muted: #64748b;
+  --chart-tooltip-bg: #1e293b;
+  --chart-tooltip-border: #334155;
+  --chart-tooltip-text: #e2e8f0;
 }
 
 body {

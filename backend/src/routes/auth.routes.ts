@@ -87,7 +87,7 @@ router.post("/logout", (req, res) => {
 // GET /me - fetch the currently logged-in user
 router.get("/me", authMiddleware, async (req: AuthRequest, res) => {
     const userId = req.user.userId;
-    const selectQuery = `SELECT "fullName" FROM users WHERE user_id = $1`;
+    const selectQuery = `SELECT "fullName", email FROM users WHERE user_id = $1`;
     try {
         const result = await pool.query(selectQuery, [userId]);
         if (result.rows.length === 0) {
@@ -106,8 +106,7 @@ router.get("/google", passport.authenticate("google", {
 }));
 
 //handle the callback from Google after authentication
-router.get(
-    "/google/callback",
+router.get("/google/callback",
     passport.authenticate("google", {
         session: false,
         failureRedirect: "http://localhost:5173/login",

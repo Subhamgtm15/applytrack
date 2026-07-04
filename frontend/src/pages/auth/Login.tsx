@@ -88,13 +88,13 @@ export default function Signup() {
         </button>
         <div className="text-center text-sm text-slate-600 dark:text-slate-400">
           Don't have an account?{" "}
-          <span className="text-indigo-600 hover:text-indigo-700 cursor-pointer font-medium" onClick={() => navigate("/signup")}>
+          <span className="text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 cursor-pointer font-medium" onClick={() => navigate("/signup")}>
             Sign Up
           </span>
         </div>
         <div className="text-center text-sm text-slate-600 dark:text-slate-400">
           Or sign in with{" "}
-          <span className="text-indigo-600 hover:text-indigo-700 cursor-pointer font-medium" onClick={signInWithGoogle}>
+          <span className="text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 cursor-pointer font-medium" onClick={signInWithGoogle}>
             Google
           </span>
         </div>

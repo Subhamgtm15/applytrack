@@ -305,7 +305,7 @@ export default function AddApplication() {
 
       {/* Notes */}
       <section className="mb-8">
-        <h2 className="mb-4 text-lg font-semibold text-slate-900">
+        <h2 className="mb-4 text-lg font-semibold text-slate-900 dark:text-slate-100">
           Notes
         </h2>
 

@@ -37,8 +37,8 @@ export default function Upcoming({
   const isInterview = status.toLowerCase() === "interview"; // we can use this boolean to conditionally style the status badge differently for interviews vs follow-ups.
 
   const statusClasses = isInterview
-    ? "bg-purple-100 text-purple-700 ring-purple-200"
-    : "bg-amber-100 text-amber-700 ring-amber-200"; // different colors for interview vs follow-up status badges.
+    ? "bg-purple-100 text-purple-700 ring-purple-200 dark:bg-purple-900/40 dark:text-purple-300"
+    : "bg-amber-100 text-amber-700 ring-amber-200 dark:bg-amber-900/40 dark:text-amber-300"; // different colors for interview vs follow-up status badges.
 
   return (
     <article className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-3 transition hover:-translate-y-0.5 hover:bg-white hover:shadow-sm dark:border-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700/50">
@@ -54,7 +54,7 @@ export default function Upcoming({
       </div>
 
       <div className="flex shrink-0 items-center gap-2">
-        <div className={`rounded-full p-2 ${iconBg ?? "bg-slate-100 text-slate-700"}`}>
+        <div className={`rounded-full p-2 ${iconBg ?? "bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-200"}`}>
           <Icon className="h-4 w-4" />
         </div>
         <span className={`rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] ring-1 ${statusClasses} dark:ring-0`}>

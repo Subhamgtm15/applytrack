@@ -160,6 +160,7 @@ export default function Dashboard() {
   const upcomingFollowUpCount = validUpcoming.filter(
     (app) => app.status === "follow-up"
   ).length;
+  
   const followUpSubtitle = (
     <span className={upcomingFollowUpCount > 0 ? "text-yellow-600 dark:text-yellow-300" : "text-slate-500 dark:text-slate-400"}>
       {upcomingFollowUpCount > 0 ? `${upcomingFollowUpCount} due soon` : "None due soon"}
@@ -213,26 +214,30 @@ export default function Dashboard() {
             <div className="h-72 w-full">
               <ResponsiveContainer width="100%" height={280} minWidth={0} minHeight={0}>
                 <BarChart data={weeklyInterviewActivity} margin={{ top: 12, right: 12, left: -20, bottom: 8 }}>
-                  <CartesianGrid vertical={false} stroke="#e2e8f0" strokeDasharray="3 3" />
+                  <CartesianGrid vertical={false} stroke="var(--chart-grid)" strokeDasharray="3 3" />
                   <XAxis
                     dataKey="label"
                     tickLine={false}
                     axisLine={false}
-                    tick={{ fill: "#64748b", fontSize: 10 }}
+                    tick={{ fill: "var(--chart-axis)", fontSize: 10 }}
                   />
                   <YAxis
                     allowDecimals={false}
                     tickLine={false}
                     axisLine={false}
-                    tick={{ fill: "#94a3b8", fontSize: 12 }}
+                    tick={{ fill: "var(--chart-axis-muted)", fontSize: 12 }}
                   />
                   <Tooltip
                     cursor={{ fill: "rgba(124, 58, 237, 0.08)" }}
                     contentStyle={{
                       borderRadius: "16px",
-                      border: "1px solid #e2e8f0",
+                      backgroundColor: "var(--chart-tooltip-bg)",
+                      border: "1px solid var(--chart-tooltip-border)",
+                      color: "var(--chart-tooltip-text)",
                       boxShadow: "0 8px 24px rgba(15, 23, 42, 0.08)",
                     }}
+                    labelStyle={{ color: "var(--chart-tooltip-text)" }}
+                    itemStyle={{ color: "var(--chart-tooltip-text)" }}
                     formatter={(value) => [`${value ?? 0} applications`, "Count"]}
                     labelFormatter={(_, payload) => payload?.[0]?.payload?.rangeLabel ?? ""}
                   />
@@ -245,7 +250,7 @@ export default function Dashboard() {
 
         {/* RIGHT: Upcoming */}
         <div className="p-4 bg-white col-span-1 border border-slate-200 rounded-2xl shadow-2xs dark:bg-slate-800 dark:border-slate-700">
-          <div className="mb-4 text-lg font-semibold dark:text-slate-100">Upcoming</div>
+          <div className="mb-4 text-lg font-semibold text-slate-900 dark:text-slate-100">Upcoming</div>
           <div className="flex flex-col gap-4">
             {upcomingInterviews.length === 0 ? (
               <p className="text-sm text-gray-500 dark:text-slate-400">No upcoming interviews or follow-ups.</p>
@@ -270,14 +275,14 @@ export default function Dashboard() {
       </div>
       {/* // Recent Applications List */}
       <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:bg-slate-800 dark:border-slate-700">
-        <div className="mb-5 flex items-center justify-between gap-4">
+        <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
           <div>
             <h2 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">Recent Applications</h2>
             <p className="mt-1 text-sm leading-6 text-slate-500 dark:text-slate-400">Newest applications first, sorted by the dateApplied field</p>
           </div>
           <Link
             to="/applications"
-            className="inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:border-slate-500 dark:hover:bg-slate-700"
+            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-300 dark:hover:border-slate-500 dark:hover:bg-slate-700"
           >
             View all
             <ChevronRight className="h-4 w-4" />
