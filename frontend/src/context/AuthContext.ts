@@ -2,6 +2,9 @@ import { createContext } from 'react';
 export interface User {
     fullName: string;
     email: string;
+    currentPosition: string;
+    targetPosition: string;
+    linkedin: string;
 }
 
 export interface AuthContextType {

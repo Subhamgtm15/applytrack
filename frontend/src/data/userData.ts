@@ -1,8 +1,7 @@
 export type userData={
-firstName: string,
-  lastName: string,
+  fullName: string,
   email: string,
-  currentRole: string,
-  targetRole: string,
+  currentPosition: string,
+  targetPosition: string,
   linkedin:string
 }

@@ -87,7 +87,7 @@ router.post("/logout", (req, res) => {
 // GET /me - fetch the currently logged-in user
 router.get("/me", authMiddleware, async (req: AuthRequest, res) => {
     const userId = req.user.userId;
-    const selectQuery = `SELECT "fullName", email FROM users WHERE user_id = $1`;
+    const selectQuery = `SELECT "fullName", email, current_position, target_position, linkedin FROM users WHERE user_id = $1`;
     try {
         const result = await pool.query(selectQuery, [userId]);
         if (result.rows.length === 0) {
@@ -96,6 +96,39 @@ router.get("/me", authMiddleware, async (req: AuthRequest, res) => {
         res.status(200).json({ message: "user found", user:result.rows[0] });
     } catch (error) {
         res.status(500).json({ error: "An error occurred while fetching the user" });
+    }
+});
+
+// PUT /me - update the currently logged-in user's profile
+router.put("/me", authMiddleware, async (req: AuthRequest, res) => {
+    const userId = req.user.userId;
+    const { fullName, currentPosition, targetPosition, linkedin } = req.body;
+
+    if (!fullName || !fullName.trim()) {
+        return res.status(400).json({ message: "Full name is required" });
+    }
+
+    const updateQuery = `
+        UPDATE users
+        SET "fullName" = $1, current_position = $2, target_position = $3, linkedin = $4
+        WHERE user_id = $5
+        RETURNING "fullName", email, current_position, target_position, linkedin`;
+    const values = [
+        fullName.trim(),
+        currentPosition ?? null,
+        targetPosition ?? null,
+        linkedin ?? null,
+        userId,
+    ];
+
+    try {
+        const result = await pool.query(updateQuery, values);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        res.status(200).json({ message: "Profile updated successfully", user: result.rows[0] });
+    } catch (error) {
+        res.status(500).json({ error: "An error occurred while updating the profile" });
     }
 });
 

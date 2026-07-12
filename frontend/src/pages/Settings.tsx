@@ -3,15 +3,15 @@ import type { userData } from "../data/userData";
 import { useForm } from "../hooks/useForm";
 import { useMessage } from "../hooks/useMessage";
 import { AuthContext } from "../context/AuthContext";
+import { updateUserProfile } from "../services/api";
 
 export default function Settings() {
   // Similar to AddApplication, we use the useForm hook here to manage the state of the user profile form. 
   const { formData, setFormData, handleInputChange } = useForm<userData>({
-    firstName: "",
-    lastName: "",
+    fullName: "",
     email: "",
-    currentRole: "",
-    targetRole: "",
+    currentPosition: "",
+    targetPosition: "",
     linkedin: "",
   });
 
@@ -22,21 +22,34 @@ export default function Settings() {
 
   useEffect(() => {
     if (!auth?.user) return;
-    // The users table stores a single "fullName", so we split it into first/last for the form.
-    const [firstName, ...rest] = (auth.user.fullName ?? "").trim().split(" ");
     setFormData((prev) => ({
       ...prev,
-      firstName: firstName ?? "",
-      lastName: rest.join(" "),
+      fullName: auth.user!.fullName ?? "",
       email: auth.user!.email ?? "",
+      currentPosition: auth.user!.currentPosition ?? "",
+      targetPosition: auth.user!.targetPosition ?? "",
+      linkedin: auth.user!.linkedin ?? "",
     }));
   }, [auth?.user, setFormData]);
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    showMessage("Profile saved successfully!"); // Show success message to user
-    console.log("Saved profile:", formData);
+    try {
+      const response = await updateUserProfile({
+        fullName: formData.fullName.trim(),
+        currentPosition: formData.currentPosition,
+        targetPosition: formData.targetPosition,
+        linkedin: formData.linkedin,
+      });
+      // Keep the context in sync so the Navbar reflects the new name immediately.
+      auth?.setUser(response.user);
+      showMessage("Profile saved successfully!");
+    } catch (error) {
+      console.error("Error saving profile:", error);
+      showMessage("Failed to save profile.", "error");
+    }
   };
+
 
   return (
     <form
@@ -60,23 +73,11 @@ export default function Settings() {
       <div className="grid gap-5 md:grid-cols-2">
         <div>
           <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
-            First Name
+            Full Name
           </label>
           <input
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleInputChange}
-            className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:border-indigo-400"
-          />
-        </div>
-
-        <div>
-          <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
-            Last Name
-          </label>
-          <input
-            name="lastName"
-            value={formData.lastName}
+            name="fullName"
+            value={formData.fullName}
             onChange={handleInputChange}
             className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:border-indigo-400"
           />
@@ -99,8 +100,8 @@ export default function Settings() {
             Current Role
           </label>
           <input
-            name="currentRole"
-            value={formData.currentRole}
+            name="currentPosition"
+            value={formData.currentPosition}
             onChange={handleInputChange}
             className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:border-indigo-400"
           />
@@ -111,8 +112,8 @@ export default function Settings() {
             Target Role
           </label>
           <input
-            name="targetRole"
-            value={formData.targetRole}
+            name="targetPosition"
+            value={formData.targetPosition}
             onChange={handleInputChange}
             className="mt-1 w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:border-indigo-400"
           />
