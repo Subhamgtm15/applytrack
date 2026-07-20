@@ -1,8 +1,8 @@
-import { ArrowUpDown, ChevronDown, PlusCircle, Search, SlidersHorizontal } from "lucide-react";
+import { ArrowUpDown, PlusCircle, Search, SlidersHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
 import ApplicationTableRow from "../components/ApplicationTableRow";
 import type { Application } from "../data/applications";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {useNavigate} from "react-router-dom";
 import { deleteOneApplication} from "../services/applicationService";
 import { getAllApplications } from "../services/applicationService";

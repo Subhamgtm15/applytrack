@@ -20,11 +20,12 @@ router.post("/applications", async (req:AuthRequest, res) => { // This endpoint 
     const userId = req.user.userId;
 
     // Insert the application data into the database
-    const insertQuery = `INSERT INTO applications (company, role, location, job_type, salary, source, status, date_applied, follow_up_date, notes,user_id) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,$11) RETURNING *`; //returning * will return the inserted row, we can use this to send back the inserted application data in the response. 
+    const insertQuery = `INSERT INTO applications (company, role, location, job_type, salary, source, status, date_applied, follow_up_date, notes,user_id, had_interview) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10,$11,$12) RETURNING *`; //returning * will return the inserted row, we can use this to send back the inserted application data in the response. 
 
 
+    // had_interview is a permanent milestone: true the moment an application is created in (or reaches) the interview stage.
     // The values array should match the order of the columns in the insert query
-    const values = [company, role, location, jobType, salary, source, status, dateApplied, followUpDate || null, notes,userId];
+    const values = [company, role, location, jobType, salary, source, status, dateApplied, followUpDate || null, notes,userId, status === "interview"];
     try {
         const result = await pool.query(insertQuery, values);
         res.status(201).json({ message: "Application added successfully", application: result.rows[0] });
@@ -101,12 +102,15 @@ router.put("/applications/:id", async (req:AuthRequest, res) => {
             error: "Missing required fields."
         });
     }
+    // had_interview references the existing row value (OR) so it is never cleared once set:
+    // e.g. changing status from "interview" to "rejected" keeps the interview milestone true.
+    // $13 is a dedicated boolean param (computed below) so we don't reuse $7 in two conflicting type contexts.
     const updateQuery = `
     UPDATE applications
-    SET company = $1, role = $2, location = $3, job_type = $4, salary = $5, source = $6, status = $7, date_applied = $8, follow_up_date = $9, notes = $10
+    SET company = $1, role = $2, location = $3, job_type = $4, salary = $5, source = $6, status = $7, date_applied = $8, follow_up_date = $9, notes = $10, had_interview = had_interview OR $13
     WHERE id = $11 AND user_id = $12
     RETURNING *`;
-    const values = [company, role, location, jobType, salary, source, status, dateApplied, followUpDate || null, notes, id, userId];
+    const values = [company, role, location, jobType, salary, source, status, dateApplied, followUpDate || null, notes, id, userId, status === "interview"];
     try {
         const result = await pool.query(updateQuery, values);
         if (result.rows.length === 0) {

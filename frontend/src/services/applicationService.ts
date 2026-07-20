@@ -48,6 +48,8 @@ export const getAllApplications = async () => {
     return response.data.applications.map((app: any) => {
       return {
         ...app,
+        jobType: app.job_type,
+        hadInterview: app.had_interview,
         dateApplied: app.date_applied,
         followUpDate: app.follow_up_date
       }

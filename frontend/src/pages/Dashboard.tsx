@@ -184,12 +184,16 @@ export default function Dashboard() {
     <span className="text-slate-500 dark:text-slate-400">{`${rejectionRate}% of total`}</span>
   );
 
+  // Interviews milestone count: how many applications ever reached the interview stage,
+  // regardless of their current status (a rejected app that was interviewed still counts).
+  const interviewMilestoneCount = applications.filter((app) => app.hadInterview).length;
+
   return (
     <section id="center ">
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
         <StatCard title="Total Applied" value={applications.length} subtitle={appliedSubtitle} icon={BriefcaseBusiness} iconBg="bg-blue-100 text-blue-600" />
-        <StatCard title="Interviews" value={statusCount.interview} subtitle={`${upcomingInterviewCount} upcoming`} icon={Handshake} iconBg="bg-purple-100 text-purple-600" />
+        <StatCard title="Interviews" value={interviewMilestoneCount} subtitle={`${upcomingInterviewCount} upcoming`} icon={Handshake} iconBg="bg-purple-100 text-purple-600" />
         <StatCard title="Offers" value={statusCount.offer} subtitle={offerSubtitle} icon={BadgeCheck} iconBg="bg-green-100 text-green-600" />
         <StatCard title="Rejections" value={statusCount.rejected} subtitle={rejectionSubtitle} icon={CircleX} iconBg="bg-red-100 text-red-600" />
         <StatCard title="Follow-ups" value={statusCount['follow-up']} subtitle={followUpSubtitle} icon={Clock3} iconBg="bg-yellow-100 text-yellow-600" />
