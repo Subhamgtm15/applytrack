@@ -4,14 +4,27 @@ type UpcomingProps = {
   company: string;
   role: string;
   status: string;
+  date?: string;
   icon: LucideIcon;
   iconBg?: string;
 };
+
+function formatShortDate(date?: string) {
+  if (!date) {
+    return null;
+  }
+
+  return new Date(date).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+}
 
 export default function Upcoming({
   company,
   role,
   status,
+  date,
   icon: Icon,
   iconBg,
 }: UpcomingProps) {
@@ -51,6 +64,9 @@ export default function Upcoming({
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-semibold text-slate-900 dark:text-slate-100">{company}</p>
         <p className="truncate text-xs text-slate-500 dark:text-slate-400">{role}</p>
+        {formatShortDate(date) && (
+          <p className="mt-0.5 truncate text-xs font-medium text-slate-400 dark:text-slate-500">{formatShortDate(date)}</p>
+        )}
       </div>
 
       <div className="flex shrink-0 items-center gap-2">

@@ -12,6 +12,7 @@ export type Application = {
   hadInterview?: boolean; // permanent milestone: true once the application reached the interview stage (server-managed)
   dateApplied: string;
   followUpDate?: string;
+  interviewDate?: string; // scheduled interview date, used for the "Upcoming Interviews" feature
   salary?: string;
   source?: string;
   notes?: string;

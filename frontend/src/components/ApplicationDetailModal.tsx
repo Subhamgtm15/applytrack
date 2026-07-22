@@ -145,6 +145,16 @@ export default function ApplicationDetailModal({
             </div>
           </div>
 
+          {application.status === "interview" && (
+            <div className="flex items-start gap-3">
+              <Calendar className="mt-0.5 h-4 w-4 shrink-0 text-purple-500" />
+              <div>
+                <p className="text-xs font-medium uppercase tracking-wide text-slate-400">Interview</p>
+                <p className="text-sm text-slate-700 dark:text-slate-200">{formatLongDate(application.interviewDate)}</p>
+              </div>
+            </div>
+          )}
+
           <div className="flex items-start gap-3">
             <DollarSign className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
             <div>

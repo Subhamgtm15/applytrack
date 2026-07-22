@@ -126,34 +126,33 @@ export default function Dashboard() {
   // console.log(upcomingInterviews);
 
   const now = new Date();
+  now.setHours(0, 0, 0, 0); // compare on calendar day, ignoring the time part
 
-  // filter valid upcoming apps
-  const validUpcoming = applications.filter((app) => {
-    const hasFollowUp = !!app.followUpDate;      // check if followUpDate exists and is truthy
-
-    const isValidStatus =
-      app.status === "interview" || app.status === "follow-up";
-
-    const isFutureDate =
-      hasFollowUp && new Date(app.followUpDate!) >= now; // the ! tells typescript that we are sure followUpDate exists since hasFollowUp is true
-
-    return isValidStatus && isFutureDate;
-  });
-
-  //  sort by nearest date
-  const sortedUpcoming = validUpcoming.sort((a, b) => {
-    return (
-      new Date(a.followUpDate!).getTime() -
-      new Date(b.followUpDate!).getTime() // the ! tells typescript that we are sure followUpDate exists since validUpcoming only contains apps with followUpDate
-    );
-  });
+  // Build a unified list of upcoming items. Interviews are scheduled by their own
+  // interviewDate; follow-ups still use followUpDate. Each item carries the date it
+  // is sorted by, so the two kinds can be merged and ordered together.
+  const upcomingItems = applications
+    .map((app) => {
+      if (app.status === "interview" && app.interviewDate) {
+        return { app, date: app.interviewDate, kind: "interview" as const };
+      }
+      if (app.status === "follow-up" && app.followUpDate) {
+        return { app, date: app.followUpDate, kind: "follow-up" as const };
+      }
+      return null;
+    })
+    .filter(
+      (item): item is { app: Application; date: string; kind: "interview" | "follow-up" } =>
+        item !== null && new Date(item.date) >= now
+    )
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
   // take only top 3
-  const upcomingInterviews = sortedUpcoming.slice(0, 3);
+  const upcomingInterviews = upcomingItems.slice(0, 3);
 
   // count only upcoming interviews (exclude follow-ups) for the Interviews card subtitle
-  const upcomingInterviewCount = validUpcoming.filter(
-    (app) => app.status === "interview"
+  const upcomingInterviewCount = upcomingItems.filter(
+    (item) => item.kind === "interview"
   ).length;
 
   const upcomingInterviewSubtitle = (
@@ -162,9 +161,9 @@ export default function Dashboard() {
     </span>
   );
 
-  // count only upcoming follow-ups (reuse validUpcoming) for the Follow-ups card subtitle
-  const upcomingFollowUpCount = validUpcoming.filter(
-    (app) => app.status === "follow-up"
+  // count only upcoming follow-ups (reuse upcomingItems) for the Follow-ups card subtitle
+  const upcomingFollowUpCount = upcomingItems.filter(
+    (item) => item.kind === "follow-up"
   ).length;
   
   const followUpSubtitle = (
@@ -265,18 +264,19 @@ export default function Dashboard() {
             {upcomingInterviews.length === 0 ? (
               <p className="text-sm text-gray-500 dark:text-slate-400">No upcoming interviews or follow-ups.</p>
             ) : (
-              upcomingInterviews.map((app) => (
+              upcomingInterviews.map((item) => (
                 <Upcoming
-                  key={app.id}
-                  company={app.company}
-                  role={app.role}
+                  key={item.app.id}
+                  company={item.app.company}
+                  role={item.app.role}
+                  date={item.date}
                   status={
-                    app.status === "interview"
+                    item.kind === "interview"
                       ? `Interview`
                       : `Follow-up`
                   }
-                  icon={app.status === "interview" ? Handshake : Clock3}
-                  iconBg={app.status === "interview" ? "bg-purple-100 text-purple-600" : "bg-yellow-100 text-yellow-600"}
+                  icon={item.kind === "interview" ? Handshake : Clock3}
+                  iconBg={item.kind === "interview" ? "bg-purple-100 text-purple-600" : "bg-yellow-100 text-yellow-600"}
                 />
               ))
             )}

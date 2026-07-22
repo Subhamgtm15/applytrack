@@ -51,7 +51,8 @@ export const getAllApplications = async () => {
         jobType: app.job_type,
         hadInterview: app.had_interview,
         dateApplied: app.date_applied,
-        followUpDate: app.follow_up_date
+        followUpDate: app.follow_up_date,
+        interviewDate: app.interview_date
       }
     })
   } catch (error) {

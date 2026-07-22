@@ -55,6 +55,9 @@ export default function AddApplication() {
           followUpDate: result.application.follow_up_date
             ? result.application.follow_up_date.split("T")[0]
             : "",
+          interviewDate: result.application.interview_date
+            ? result.application.interview_date.split("T")[0]
+            : "",
           notes: result.application.notes,
         };
         const base = formatted;
@@ -83,6 +86,7 @@ export default function AddApplication() {
       status: "applied",
       dateApplied: new Date().toISOString().split("T")[0], //set the date to current date  
       followUpDate: "",
+      interviewDate: "",
       notes: "",
     });
 
@@ -300,6 +304,22 @@ export default function AddApplication() {
               className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:border-indigo-400"
             />
           </div>
+
+          {formData.status === "interview" && (
+            <div>
+              <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+                Interview Date
+              </label>
+              <input
+                type="date"
+                name="interviewDate"
+                value={formData.interviewDate}
+                onChange={handleInputChange}
+                className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:border-indigo-400"
+              />
+              <p className="mt-1 text-xs text-slate-400">Shown in Upcoming Interviews on your dashboard.</p>
+            </div>
+          )}
         </div>
       </section>
 
