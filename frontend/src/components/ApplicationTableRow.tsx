@@ -5,6 +5,7 @@ type ApplicationTableRowProps = {
   application: Application;
   deleteApplication: (id: number) => void;
   editApplication: (id: number) => void;
+  viewApplication: (application: Application) => void;
 };
 
 const statusBadgeClasses: Record<Application["status"], string> = {
@@ -48,7 +49,7 @@ function formatShortDate(date?: string) {
 }
 
 
-export default function ApplicationTableRow({ application,deleteApplication,editApplication }: ApplicationTableRowProps) {
+export default function ApplicationTableRow({ application,deleteApplication,editApplication,viewApplication }: ApplicationTableRowProps) {
   const avatarColor = getAvatarColor(application.company);
   const companyInitial = application.company.slice(0, 1).toUpperCase();
 
@@ -103,7 +104,7 @@ export default function ApplicationTableRow({ application,deleteApplication,edit
 
         {/* Action buttons */}
         <div className="flex items-center gap-2 pl-13">
-          <button className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-700" aria-label={`View ${application.company}`}>
+          <button onClick={()=>viewApplication(application)} className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-700" aria-label={`View ${application.company}`}>
             <Eye className="h-3.5 w-3.5" /> View
           </button>
           <button onClick={()=>editApplication(application.id)} className="flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-700" aria-label={`Edit ${application.company}`}>
@@ -148,7 +149,7 @@ export default function ApplicationTableRow({ application,deleteApplication,edit
         <div className="text-sm text-amber-600 dark:text-amber-300">{formatShortDate(application.followUpDate)}</div>
 
         <div className="flex items-center gap-3 text-slate-400 dark:text-slate-400">
-          <button className="rounded-lg p-1 transition hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-700/50 dark:hover:text-slate-200" aria-label={`View ${application.company}`}>
+          <button onClick={()=>viewApplication(application)} className="rounded-lg p-1 transition hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-700/50 dark:hover:text-slate-200" aria-label={`View ${application.company}`}>
             <Eye className="h-4 w-4" />
           </button>
           <button onClick={()=>editApplication(application.id)} className="rounded-lg p-1 transition hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-slate-700/50 dark:hover:text-slate-200" aria-label={`Edit ${application.company}`}>

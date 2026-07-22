@@ -1,6 +1,7 @@
 import { ArrowUpDown, PlusCircle, Search, SlidersHorizontal } from "lucide-react";
 import { Link } from "react-router-dom";
 import ApplicationTableRow from "../components/ApplicationTableRow";
+import ApplicationDetailModal from "../components/ApplicationDetailModal";
 import type { Application } from "../data/applications";
 import { useState } from "react";
 import {useNavigate} from "react-router-dom";
@@ -14,6 +15,7 @@ export default function Applications() {
   const [statusFilter, setStatusFilter] = useState<"all" | Application["status"]>("all");
   const [typeFilter, setTypeFilter] = useState<"all" | Application["jobType"]>("all");
   const [sortOption, setSortOption] = useState<"date-desc" | "date-asc" | "company-asc">("date-desc"); //this means sortoptions has three possible values but initially set to "date-desc"  
+  const [selectedApplication, setSelectedApplication] = useState<Application | null>(null); // the application currently shown in the details overlay, or null when closed
   const navigate=useNavigate();
 
   const { data, error, isLoading } = useQuery<Application[]>({
@@ -103,6 +105,10 @@ if (error) {
   const editApplication = (id: number) => {
     // Implement the logic to edit the application with the given id
     navigate(`/addapplication/${id}`);
+  }
+
+  const viewApplication = (application: Application) => {
+    setSelectedApplication(application);
   }
 
   return (
@@ -198,10 +204,17 @@ if (error) {
 
         <div className="divide-y divide-slate-100 dark:divide-slate-700">
           {displayedApplications.map((application) => (
-            <ApplicationTableRow key={application.id} application={application} deleteApplication={deleteApplication} editApplication={editApplication}/>
+            <ApplicationTableRow key={application.id} application={application} deleteApplication={deleteApplication} editApplication={editApplication} viewApplication={viewApplication}/>
           ))}
         </div>
       </div>
+
+      <ApplicationDetailModal
+        application={selectedApplication}
+        onClose={() => setSelectedApplication(null)}
+        editApplication={editApplication}
+        deleteApplication={deleteApplication}
+      />
     </section>
   );
 }
