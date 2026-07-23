@@ -147,7 +147,7 @@ if (error) {
             <select
               value={statusFilter}
               onChange={(event) => setStatusFilter(event.target.value as "all" | Application["status"])}
-              className="bg-transparent text-sm font-medium text-slate-700 outline-none dark:text-slate-200"
+              className="bg-transparent text-sm font-medium text-slate-700 outline-none dark:bg-slate-800 dark:text-slate-200 [&>option]:bg-white [&>option]:text-slate-700 dark:[&>option]:bg-slate-800 dark:[&>option]:text-slate-200"
             >
               <option value="all">All</option>
               <option value="applied">Applied</option>
@@ -164,7 +164,7 @@ if (error) {
             <select
               value={typeFilter}
               onChange={(event) => setTypeFilter(event.target.value as "all" | Application["jobType"])} // Update the typeFilter state based on the selected option in the dropdown. The value is cast to "all" or a specific job type from the Application type to ensure type safety.
-              className="bg-transparent text-sm font-medium text-slate-700 outline-none dark:text-slate-200"
+              className="bg-transparent text-sm font-medium text-slate-700 outline-none dark:bg-slate-800 dark:text-slate-200 [&>option]:bg-white [&>option]:text-slate-700 dark:[&>option]:bg-slate-800 dark:[&>option]:text-slate-200"
             >
               <option value="all">All</option>
               <option value="full-time">Full-time</option>
@@ -181,7 +181,7 @@ if (error) {
             <select
               value={sortOption}
               onChange={(event) => setSortOption(event.target.value as "date-desc" | "date-asc" | "company-asc")}
-              className="bg-transparent text-sm font-medium text-slate-700 outline-none dark:text-slate-200"
+              className="bg-transparent text-sm font-medium text-slate-700 outline-none dark:bg-slate-800 dark:text-slate-200 [&>option]:bg-white [&>option]:text-slate-700 dark:[&>option]:bg-slate-800 dark:[&>option]:text-slate-200"
             >
               <option value="date-desc">Date Applied</option>
               <option value="date-asc">Oldest Applied</option>

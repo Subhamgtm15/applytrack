@@ -10,7 +10,12 @@ import { sendApplication } from "../services/applicationService";
 import { updateApplication } from "../services/applicationService";
 import { getSpecificApplication } from "../services/applicationService";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { RollerCoaster } from "lucide-react";
+
+// Shared field styles so every input/select/textarea stays visually consistent.
+const fieldClass =
+  "w-full rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-slate-800 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-200 dark:placeholder:text-slate-500 dark:focus:border-indigo-400";
+const labelClass =
+  "mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300";
 
 //we used object instead of multiple useState hooks to manage the form date in more organized way.
 export default function AddApplication() {
@@ -143,14 +148,15 @@ export default function AddApplication() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-          New Application
+          {editMode ? "Edit Application" : "New Application"}
         </h1>
         <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
           Track a job you've applied to or plan to apply for.
         </p>
       </div>
+
       {message && (
-        <p className={`mb-4 rounded-lg bg-green-50 p-3 text-sm  ${message?.type === "error" ? "bg-red-50 text-red-600 dark:bg-red-900/40 dark:text-red-300" : "text-green-600 dark:bg-green-900/40 dark:text-green-300"}`}>
+        <p className={`mb-6 rounded-lg p-3 text-sm  ${message?.type === "error" ? "bg-red-50 text-red-600 dark:bg-red-900/40 dark:text-red-300" : "bg-green-50 text-green-600 dark:bg-green-900/40 dark:text-green-300"}`}>
           {message?.text}
         </p>
       )}
@@ -163,7 +169,7 @@ export default function AddApplication() {
 
         <div className="grid gap-5 md:grid-cols-2">
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+            <label className={labelClass}>
               Company Name *
             </label>
             <input
@@ -172,13 +178,13 @@ export default function AddApplication() {
               value={formData.company}
               onChange={handleInputChange}
               placeholder="e.g. Stripe"
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:placeholder:text-slate-500 dark:focus:border-indigo-400"
+              className={fieldClass}
             />
             <ErrorMessage error={errors.company} />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+            <label className={labelClass}>
               Job Title *
             </label>
             <input
@@ -187,13 +193,13 @@ export default function AddApplication() {
               value={formData.role}
               onChange={handleInputChange}
               placeholder="e.g. Frontend Engineer"
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:placeholder:text-slate-500 dark:focus:border-indigo-400"
+              className={fieldClass}
             />
             <ErrorMessage error={errors.role} />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+            <label className={labelClass}>
               Location *
             </label>
             <input
@@ -202,18 +208,18 @@ export default function AddApplication() {
               value={formData.location}
               onChange={handleInputChange}
               placeholder="e.g. Kathmandu, Nepal"
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:placeholder:text-slate-500 dark:focus:border-indigo-400"
+              className={fieldClass}
             />
             <ErrorMessage error={errors.location} />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+            <label className={labelClass}>
               Job Type *
             </label>
             <select name="jobType" value={formData.jobType}
               onChange={handleInputChange}
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:border-indigo-400">
+              className={fieldClass}>
               <option value="">Select job type</option>
               <option value="full-time">Full-time</option>
               <option value="part-time">Part-time</option>
@@ -225,7 +231,7 @@ export default function AddApplication() {
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+            <label className={labelClass}>
               Salary Range
             </label>
             <input
@@ -234,13 +240,13 @@ export default function AddApplication() {
               value={formData.salary}
               onChange={handleInputChange}
               placeholder="e.g. $80k - $120k"
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:placeholder:text-slate-500 dark:focus:border-indigo-400"
+              className={fieldClass}
             />
 
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+            <label className={labelClass}>
               Source
             </label>
             <input
@@ -249,7 +255,7 @@ export default function AddApplication() {
               value={formData.source}
               onChange={handleInputChange}
               placeholder="LinkedIn, Referral..."
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:placeholder:text-slate-500 dark:focus:border-indigo-400"
+              className={fieldClass}
             />
           </div>
         </div>
@@ -263,12 +269,12 @@ export default function AddApplication() {
 
         <div className="grid gap-5 md:grid-cols-2">
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+            <label className={labelClass}>
               Status *
             </label>
             <select name="status" value={formData.status}
               onChange={handleInputChange}
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:border-indigo-400">
+              className={fieldClass}>
               <option value="applied">Applied</option>
               <option value="interview">Interview</option>
               <option value="offer">Offer</option>
@@ -279,7 +285,7 @@ export default function AddApplication() {
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+            <label className={labelClass}>
               Date Applied *
             </label>
             <input
@@ -287,13 +293,13 @@ export default function AddApplication() {
               name="dateApplied"
               value={formData.dateApplied}
               onChange={handleInputChange}
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:border-indigo-400"
+              className={fieldClass}
             />
             <ErrorMessage error={errors.dateApplied} />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+            <label className={labelClass}>
               Follow-up Date
             </label>
             <input
@@ -301,13 +307,13 @@ export default function AddApplication() {
               name="followUpDate"
               value={formData.followUpDate}
               onChange={handleInputChange}
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:border-indigo-400"
+              className={fieldClass}
             />
           </div>
 
           {formData.status === "interview" && (
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+              <label className={labelClass}>
                 Interview Date
               </label>
               <input
@@ -315,7 +321,7 @@ export default function AddApplication() {
                 name="interviewDate"
                 value={formData.interviewDate}
                 onChange={handleInputChange}
-                className="w-full rounded-lg border border-slate-300 px-4 py-2.5 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:focus:border-indigo-400"
+                className={fieldClass}
               />
               <p className="mt-1 text-xs text-slate-400">Shown in Upcoming Interviews on your dashboard.</p>
             </div>
@@ -330,7 +336,7 @@ export default function AddApplication() {
         </h2>
 
         <div>
-          <label className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300">
+          <label className={labelClass}>
             Application Notes
           </label>
 
@@ -340,7 +346,7 @@ export default function AddApplication() {
             onChange={handleInputChange}
             rows={5}
             placeholder="Add any notes about this application..."
-            className="w-full resize-none rounded-lg border border-slate-300 px-4 py-3 outline-none transition focus:border-indigo-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:placeholder:text-slate-500 dark:focus:border-indigo-400"
+            className={`${fieldClass} resize-none`}
           />
         </div>
       </section>
@@ -356,14 +362,14 @@ export default function AddApplication() {
               resetForm();
             }
           }}
-          className="rounded-lg border border-slate-300 px-5 py-2.5 font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-700/50"
+          className="cursor-pointer rounded-lg border border-slate-300 px-5 py-2.5 font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-700/50"
         >
           {editMode ? 'Reset Form' : 'Clear Form'}
         </button>
 
         <button
           type="submit"
-          className="cursor-pointer rounded-lg bg-indigo-600 px-5 py-2.5 font-medium text-white hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600"
+          className="cursor-pointer rounded-lg bg-indigo-600 px-5 py-2.5 font-medium text-white transition hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600"
         >
           {editMode ? "Update Application" : "Save Application"}
         </button>

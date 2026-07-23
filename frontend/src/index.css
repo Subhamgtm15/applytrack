@@ -27,4 +27,26 @@ body {
 html, body {
   overflow-x: hidden;
 }
+
+/* Override browser autofill styling so email/LinkedIn fields keep the theme's
+   background and text color instead of Chrome's forced light-blue fill. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: #1e293b;
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset;
+  caret-color: #1e293b;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark input:-webkit-autofill:active {
+  -webkit-text-fill-color: #e2e8f0;
+  -webkit-box-shadow: 0 0 0 1000px #0f172a inset;
+  caret-color: #e2e8f0;
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
