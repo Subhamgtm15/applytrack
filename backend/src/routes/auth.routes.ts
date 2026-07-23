@@ -4,13 +4,14 @@ import jwt from "jsonwebtoken";
 import passport from "passport";
 import { pool } from "../db";
 import { authMiddleware } from "../middlewares/auth.middleware";
+import { loginLimiter, signupLimiter } from "../middlewares/rateLimit.middleware";
 import { AuthRequest } from "../types/authRequest";
 import dotenv from "dotenv";
 dotenv.config();
 const router = express.Router();
 
 // POST /signup endpoint for user registration
-router.post("/signup", async (req, res) => {
+router.post("/signup", signupLimiter, async (req, res) => {
     const { fullName, email, password } = req.body;
     if (!fullName || !email || !password) {
         return res.status(400).json({ message: "All fields are required" });
@@ -35,7 +36,7 @@ router.post("/signup", async (req, res) => {
 
 
 // POST /login endpoint for user authentication
-router.post("/login", async (req, res) => {
+router.post("/login", loginLimiter, async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
         return res.status(400).json({ message: "Email and password are required" });
