@@ -45,6 +45,13 @@ export const signInWithGoogle = () => {
     window.location.href = `${api.defaults.baseURL}/auth/google`;
 }
 
+// Exchange the token issued by the Google OAuth callback for an auth cookie set in this
+// (frontend) origin's partition. See POST /auth/session on the backend for why this is needed.
+export const establishSession = async (token: string) => {
+    const response = await api.post("/auth/session", { token });
+    return response.data;
+}
+
 
 export const updateUserProfile = async (payload: UpdateProfilePayload) => {
     try {

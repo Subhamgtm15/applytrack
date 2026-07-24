@@ -7,6 +7,7 @@ import AddApplication from './pages/AddApplication'
 import Settings from './pages/Settings'
 import Signup from './pages/auth/Signup';
 import Login from './pages/auth/Login';
+import AuthCallback from './pages/auth/AuthCallback';
 import ProtectedRoute from './components/ProtectedRoute';
 
 export default function AppRoutes() {
@@ -14,6 +15,7 @@ export default function AppRoutes() {
     <Routes>
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/auth/callback" element={<AuthCallback />} />
       <Route element={<ProtectedRoute><MainLayout /></ProtectedRoute>}>
         <Route path="/" element={<Dashboard />} />
         <Route path="/applications" element={<Applications />} />

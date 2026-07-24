@@ -94,6 +94,26 @@ router.post("/logout", (req, res) => {
 });
 
 
+// POST /session - exchange a token issued by the OAuth callback for the auth cookie.
+// The Google callback runs while the browser is on the backend domain, so a partitioned (CHIPS)
+// cookie set there is keyed to the backend's partition and is invisible to the frontend. Instead
+// the callback hands the token to the frontend, which posts it here so the cookie is set from the
+// frontend's own top-level context (correct partition) and is then sent on subsequent requests.
+router.post("/session", (req, res) => {
+    const { token } = req.body;
+    if (!token) {
+        return res.status(400).json({ message: "Token is required" });
+    }
+    try {
+        jwt.verify(token, process.env.JWT_SECRET as string);
+        res.cookie("token", token, cookieOptions);
+        return res.status(200).json({ message: "Session established" });
+    } catch {
+        return res.status(401).json({ message: "Invalid token" });
+    }
+});
+
+
 // GET /me - fetch the currently logged-in user
 router.get("/me", authMiddleware, async (req: AuthRequest, res) => {
     const userId = req.user.userId;
@@ -163,10 +183,11 @@ router.get("/google/callback",
             { expiresIn: "1h" }
         );
 
-        res.cookie("token", jwtToken, cookieOptions);
-
-        // redirect back to the frontend
-        res.redirect(clientUrl);
+        // Hand the token to the frontend via the URL fragment (never sent to servers/logs). The
+        // frontend exchanges it at POST /session so the auth cookie is set in the frontend's
+        // partition. Setting the cookie here would store it under the backend's partition (CHIPS)
+        // and it would never be sent from the Vercel origin.
+        res.redirect(`${clientUrl}/auth/callback#token=${jwtToken}`);
     }
 );
 
