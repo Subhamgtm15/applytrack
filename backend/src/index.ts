@@ -28,6 +28,11 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(passport.initialize());
 
+// Public health check endpoint (used by Render's healthCheckPath). Must return 200
+// and must be declared before the auth-protected application routes mounted at "/".
+app.get("/", (_req, res) => {
+    res.status(200).json({ status: "ok" });
+});
 
 // Use the auth routes for any requests to /auth
 app.use("/auth", authRoutes);
