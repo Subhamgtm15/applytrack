@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import type { Application } from "../data/applications";
 import RecentApplicationRow from "../components/RecentApplicationRow";
 import StatCard from "../components/StatCard";
@@ -10,7 +9,7 @@ import { getAllApplications } from "../services/applicationService";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Dashboard() {
-  const { data, error, isLoading } = useQuery<Application[]>({
+  const { data } = useQuery<Application[]>({
     queryKey: ["applications"],
     queryFn: getAllApplications,
   });

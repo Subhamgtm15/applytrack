@@ -5,7 +5,7 @@ import type { User as AuthUser } from "../context/AuthContext";
 
 
 const api = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: import.meta.env.VITE_API_URL ?? "http://localhost:5000",
   headers: {
     "Content-Type": "application/json",
   },

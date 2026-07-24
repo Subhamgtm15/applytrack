@@ -1,6 +1,5 @@
 import { Eye, MapPin, Pencil, Trash2, Calendar, Briefcase, Banknote } from "lucide-react";
 import type { Application } from "../data/applications";
-import { updateApplication } from "../services/applicationService";
 type ApplicationTableRowProps = {
   application: Application;
   deleteApplication: (id: number) => void;

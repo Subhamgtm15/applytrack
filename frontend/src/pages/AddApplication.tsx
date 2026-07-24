@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { sendApplication } from "../services/applicationService";
 import { updateApplication } from "../services/applicationService";
 import { getSpecificApplication } from "../services/applicationService";
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
 
 // Shared field styles so every input/select/textarea stays visually consistent.
 const fieldClass =

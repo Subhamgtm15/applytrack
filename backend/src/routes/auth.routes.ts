@@ -10,6 +10,17 @@ import dotenv from "dotenv";
 dotenv.config();
 const router = express.Router();
 
+// In production the frontend (Vercel) and backend (Render) live on different domains, so the
+// auth cookie must be cross-site: sameSite "none" + secure. Locally we use lax + insecure.
+const isProduction = process.env.NODE_ENV === "production";
+const clientUrl = process.env.CLIENT_URL ?? "http://localhost:5173";
+const cookieOptions = {
+    httpOnly: true, // prevents client-side JavaScript from accessing the cookie
+    secure: isProduction, // requires HTTPS in production
+    sameSite: isProduction ? "none" as const : "lax" as const,
+    maxAge: 60 * 60 * 1000, // browser delete cookie time
+};
+
 // POST /signup endpoint for user registration
 router.post("/signup", signupLimiter, async (req, res) => {
     const { fullName, email, password } = req.body;
@@ -62,12 +73,7 @@ router.post("/login", loginLimiter, async (req, res) => {
             { expiresIn: "1h" }
         );
         // Set the token in an HTTP-only cookie
-        res.cookie("token", jwtToken, {
-            httpOnly: true, // prevents client-side JavaScript from accessing the cookie
-            secure: false, //for local development false is fine, set to true in production with HTTPS
-            sameSite: "lax",
-            maxAge: 60 * 60 * 1000, //browser delete cookie time
-        });
+        res.cookie("token", jwtToken, cookieOptions);
         return res.status(200).json({ message: "Login successful" });
     }
     catch (error) {
@@ -80,7 +86,7 @@ router.post("/login", loginLimiter, async (req, res) => {
 // POST /logout endpoint for user logout
 
 router.post("/logout", (req, res) => {
-    res.clearCookie("token");
+    res.clearCookie("token", cookieOptions);
     res.status(200).json({ message: "Logout successful" });
 });
 
@@ -143,7 +149,7 @@ router.get("/google", passport.authenticate("google", {
 router.get("/google/callback",
     passport.authenticate("google", {
         session: false,
-        failureRedirect: "http://localhost:5173/login",
+        failureRedirect: `${clientUrl}/login`,
     }),
     (req, res) => {
         const user = req.user as any;
@@ -154,15 +160,10 @@ router.get("/google/callback",
             { expiresIn: "1h" }
         );
 
-        res.cookie("token", jwtToken, {
-            httpOnly: true,
-            secure: false,
-            sameSite: "lax",
-            maxAge: 60 * 60 * 1000,
-        });
+        res.cookie("token", jwtToken, cookieOptions);
 
         // redirect back to the frontend
-        res.redirect("http://localhost:5173");
+        res.redirect(clientUrl);
     }
 );
 

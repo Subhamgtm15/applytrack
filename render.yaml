@@ -1,0 +1,29 @@
+# Render Blueprint for the ApplyTrack backend (Express + Node).
+# Deploy: New > Blueprint, point Render at this repo. Set secret env vars in the dashboard.
+services:
+  - type: web
+    name: applytrack-backend
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Neon connection string (postgresql://...?sslmode=require)
+      - key: DATABASE_URL
+        sync: false
+      # Frontend origin, e.g. https://applytrack.vercel.app
+      - key: CLIENT_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CLIENT_ID
+        sync: false
+      - key: CLIENT_SECRET
+        sync: false
+      # e.g. https://applytrack-backend.onrender.com/auth/google/callback
+      - key: CALLBACK_URL
+        sync: false
