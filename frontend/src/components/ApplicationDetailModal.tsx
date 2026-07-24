@@ -1,4 +1,4 @@
-import { Briefcase, Calendar, DollarSign, Link2, MapPin, Pencil, StickyNote, Trash2, X } from "lucide-react";
+import { Briefcase, Calendar, Banknote, Link2, MapPin, Pencil, StickyNote, Trash2, X } from "lucide-react";
 import { useEffect } from "react";
 import type { Application } from "../data/applications";
 
@@ -156,7 +156,7 @@ export default function ApplicationDetailModal({
           )}
 
           <div className="flex items-start gap-3">
-            <DollarSign className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
+            <Banknote className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
             <div>
               <p className="text-xs font-medium uppercase tracking-wide text-slate-400">Salary</p>
               <p className="text-sm text-slate-700 dark:text-slate-200">{application.salary || "-"}</p>

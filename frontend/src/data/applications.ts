@@ -1,6 +1,6 @@
 export type ApplicationStatus = "applied"| "interview"| "offer"| "rejected"| "follow-up";
 
-export type JobType = "full-time"| "part-time"| "remote"| "contract"| "freelance";
+export type JobType = "full-time"| "part-time"| "remote"| "contract"| "freelance"| "internship";
 
 export type Application = {
   id: number;

@@ -226,6 +226,7 @@ export default function AddApplication() {
               <option value="remote">Remote</option>
               <option value="contract">Contract</option>
               <option value="freelance">Freelance</option>
+              <option value="internship">Internship</option>
             </select>
             <ErrorMessage error={errors.jobType} />
           </div>
@@ -239,7 +240,7 @@ export default function AddApplication() {
               name="salary"
               value={formData.salary}
               onChange={handleInputChange}
-              placeholder="e.g. $80k - $120k"
+              placeholder="e.g. NPR 80k - 120k"
               className={fieldClass}
             />
 

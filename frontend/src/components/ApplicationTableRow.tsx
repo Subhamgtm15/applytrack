@@ -1,4 +1,4 @@
-import { Eye, MapPin, Pencil, Trash2, Calendar, Briefcase, DollarSign } from "lucide-react";
+import { Eye, MapPin, Pencil, Trash2, Calendar, Briefcase, Banknote } from "lucide-react";
 import type { Application } from "../data/applications";
 import { updateApplication } from "../services/applicationService";
 type ApplicationTableRowProps = {
@@ -86,7 +86,7 @@ export default function ApplicationTableRow({ application,deleteApplication,edit
           </span>
           {application.salary && (
             <span className="flex items-center gap-1">
-              <DollarSign className="h-3.5 w-3.5 shrink-0" />
+              <Banknote className="h-3.5 w-3.5 shrink-0" />
               {application.salary}
             </span>
           )}

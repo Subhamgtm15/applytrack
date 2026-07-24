@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import ApplicationTableRow from "../components/ApplicationTableRow";
 import ApplicationDetailModal from "../components/ApplicationDetailModal";
 import type { Application } from "../data/applications";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {useNavigate} from "react-router-dom";
 import { deleteOneApplication} from "../services/applicationService";
 import { getAllApplications } from "../services/applicationService";
@@ -16,6 +16,8 @@ export default function Applications() {
   const [typeFilter, setTypeFilter] = useState<"all" | Application["jobType"]>("all");
   const [sortOption, setSortOption] = useState<"date-desc" | "date-asc" | "company-asc">("date-desc"); //this means sortoptions has three possible values but initially set to "date-desc"  
   const [selectedApplication, setSelectedApplication] = useState<Application | null>(null); // the application currently shown in the details overlay, or null when closed
+  const [currentPage, setCurrentPage] = useState(1); // the page currently being viewed in the paginated list
+  const pageSize = 5; // number of applications shown per page
   const navigate=useNavigate();
 
   const { data, error, isLoading } = useQuery<Application[]>({
@@ -83,6 +85,24 @@ if (error) {
 
     return new Date(secondApp.dateApplied).getTime() - new Date(firstApp.dateApplied).getTime();
   });
+
+  const totalPages = Math.max(1, Math.ceil(displayedApplications.length / pageSize)); // total number of pages needed to display all filtered applications
+
+  // Reset back to the first page whenever the filters, search, or sort change so the user is not stuck on an out-of-range page.
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchInput, statusFilter, typeFilter, sortOption]);
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
+  const paginatedApplications = displayedApplications.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  ); // the slice of applications shown on the current page
 
   const deleteApplication = async (id: number) => {
     // Implement the logic to delete the application with the given id
@@ -172,6 +192,7 @@ if (error) {
               <option value="remote">Remote</option>
               <option value="contract">Contract</option>
               <option value="freelance">Freelance</option>
+              <option value="internship">Internship</option>
             </select>
           </label>
 
@@ -203,11 +224,56 @@ if (error) {
         </div>
 
         <div className="divide-y divide-slate-100 dark:divide-slate-700">
-          {displayedApplications.map((application) => (
+          {paginatedApplications.map((application) => (
             <ApplicationTableRow key={application.id} application={application} deleteApplication={deleteApplication} editApplication={editApplication} viewApplication={viewApplication}/>
           ))}
         </div>
       </div>
+
+      {displayedApplications.length > 0 && (
+        <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            Showing {(currentPage - 1) * pageSize + 1}-{Math.min(currentPage * pageSize, displayedApplications.length)} of {displayedApplications.length}
+          </p>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+              disabled={currentPage === 1}
+              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-slate-300 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-600"
+            >
+              Previous
+            </button>
+
+            <div className="flex items-center gap-1">
+              {Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+                <button
+                  key={page}
+                  type="button"
+                  onClick={() => setCurrentPage(page)}
+                  className={`min-w-[2.5rem] rounded-xl border px-3 py-2 text-sm font-medium transition ${
+                    page === currentPage
+                      ? "border-indigo-600 bg-indigo-600 text-white"
+                      : "border-slate-200 bg-white text-slate-600 hover:border-slate-300 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-600"
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+              disabled={currentPage === totalPages}
+              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-slate-300 disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:border-slate-600"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
 
       <ApplicationDetailModal
         application={selectedApplication}
