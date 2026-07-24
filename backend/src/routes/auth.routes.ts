@@ -18,6 +18,9 @@ const cookieOptions = {
     httpOnly: true, // prevents client-side JavaScript from accessing the cookie
     secure: isProduction, // requires HTTPS in production
     sameSite: isProduction ? "none" as const : "lax" as const,
+    // Frontend (Vercel) and backend (Render) are on different sites, so the auth cookie is
+    // "third-party". Chrome now blocks such cookies unless they are partitioned (CHIPS).
+    partitioned: isProduction,
     maxAge: 60 * 60 * 1000, // browser delete cookie time
 };
 
