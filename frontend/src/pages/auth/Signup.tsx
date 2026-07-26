@@ -49,7 +49,7 @@ export default function Signup() {
 
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900 px-4">
+        <div className="min-h-[100dvh] flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-900 px-4">
             <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-6">Create an account</h1>
             <form className="w-full max-w-md space-y-6 rounded-lg bg-white p-8 shadow-sm dark:bg-slate-800 dark:border dark:border-slate-700" onSubmit={submitForm}>
                 {message && (

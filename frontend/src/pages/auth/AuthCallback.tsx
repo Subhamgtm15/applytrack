@@ -37,7 +37,7 @@ export default function AuthCallback() {
   }, [auth, navigate]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-900">
+    <div className="min-h-[100dvh] flex items-center justify-center bg-slate-50 dark:bg-slate-900">
       <p className="text-slate-600 dark:text-slate-300">Signing you in…</p>
     </div>
   );
