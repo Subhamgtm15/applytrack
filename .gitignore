@@ -12,6 +12,7 @@ yarn-debug.log*
 
 # environment variables
 .env
+.env.example
 
 # editor/system files
 .vscode/

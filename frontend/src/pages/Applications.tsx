@@ -36,14 +36,6 @@ export default function Applications() {
     },
   });
 
-if (isLoading) {
-  return <div>Loading...</div>;
-}
-
-if (error) {
-  return <div>Failed to load applications.</div>;
-}
-
   //   useEffect(() => {
   //   const fetchApplications = async () => {
   //     try {
@@ -98,6 +90,14 @@ if (error) {
       setCurrentPage(totalPages);
     }
   }, [currentPage, totalPages]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Failed to load applications.</div>;
+  }
 
   const paginatedApplications = displayedApplications.slice(
     (currentPage - 1) * pageSize,
