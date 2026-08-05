@@ -22,3 +22,12 @@ yarn-debug.log*
 *.ntvs*
 *.njsproj
 *.sln
+
+# resume / LaTeX build artifacts
+resume.tex
+resume.pdf
+resume.aux
+resume.out
+resume.fls
+resume.fdb_latexmk
+resume.synctex.gz
