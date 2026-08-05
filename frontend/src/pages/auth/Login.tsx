@@ -1,11 +1,11 @@
 import { useForm } from "../../hooks/useForm";
-import { useState,useContext } from "react";
+import { useState } from "react";
 import { useMessage } from "../../hooks/useMessage";
 import { useNavigate } from "react-router-dom";
 import ErrorMessage from "../../components/ErrorMessage";
 import { loginUser } from "../../services/api";
 import {fetchCurrentUser} from "../../services/api";
-import { AuthContext } from "../../context/AuthContext";
+import { useAuthStore } from "../../store/authStore";
 import {signInWithGoogle} from "../../services/api";
 
 export default function Signup() {
@@ -13,7 +13,7 @@ export default function Signup() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isLoading, setIsLoading] = useState(false);
   const { message, showMessage } = useMessage();
-  const auth = useContext(AuthContext);
+  const setUser = useAuthStore((s) => s.setUser);
 
   const { formData, handleInputChange, validate } = useForm({
     email: "",
@@ -41,7 +41,7 @@ export default function Signup() {
       const response = await loginUser(formData);
       showMessage(response.message, "success");
       const userResponse = await fetchCurrentUser();
-      auth?.setUser(userResponse.user);
+      setUser(userResponse.user);
       navigate("/");
     } catch (err: any) {
       showMessage(err.response?.data?.message || "An error occurred", 'error');

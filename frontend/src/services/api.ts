@@ -1,7 +1,7 @@
 import axios from "axios";
 import type {User} from "../data/user";
 import type {UpdateProfilePayload} from "../data/updateprofilepayload";
-import type { User as AuthUser } from "../context/AuthContext";
+import type { User as AuthUser } from "../store/authStore";
 
 
 const api = axios.create({

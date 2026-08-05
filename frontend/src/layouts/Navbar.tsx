@@ -1,9 +1,9 @@
 import { Menu, Moon, Sun } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { logout } from "../services/api";
-import { useState, useEffect, useRef, useContext} from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import {AuthContext} from "../context/AuthContext";
+import { useAuthStore } from "../store/authStore";
 type Props = {
   darkMode: boolean;
   toggleTheme: () => void;
@@ -38,7 +38,7 @@ export default function Navbar({ darkMode, toggleTheme, onMenuClick }: Props) {
   const logoutUser = async () => {
     try {
       await logout();
-      auth?.clearUser();
+      clearUser();
       navigate("/login");
     } catch (error) {
       console.error("Error during logout:", error);
@@ -59,8 +59,8 @@ export default function Navbar({ darkMode, toggleTheme, onMenuClick }: Props) {
   //   fetchUser();
   // }, []);
 
-  const auth = useContext(AuthContext);
-  const fullName = auth?.user?.fullName || "";
+  const fullName = useAuthStore((s) => s.user?.fullName) || "";
+  const clearUser = useAuthStore((s) => s.clearUser);
   const firstName = fullName.split(" ")[0];
 
 

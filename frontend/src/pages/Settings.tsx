@@ -1,8 +1,8 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import type { userData } from "../data/userData";
 import { useForm } from "../hooks/useForm";
 import { useMessage } from "../hooks/useMessage";
-import { AuthContext } from "../context/AuthContext";
+import { useAuthStore } from "../store/authStore";
 import { updateUserProfile } from "../services/api";
 
 // Shared field styles keep every input visually consistent with the rest of the app.
@@ -22,20 +22,21 @@ export default function Settings() {
 
   const { message, showMessage } = useMessage(); //useMessage is a custom hook to show temporary messages to the user, such as success or error notifications. In this case, we can use it to show a success message when the profile is saved successfully.
 
-  // Reuse the user already loaded into AuthContext (fetched once on app mount) instead of re-fetching.
-  const auth = useContext(AuthContext);
+  // Reuse the user already loaded into the auth store (fetched once on app mount) instead of re-fetching.
+  const user = useAuthStore((s) => s.user);
+  const setUser = useAuthStore((s) => s.setUser);
 
   useEffect(() => {
-    if (!auth?.user) return;
+    if (!user) return;
     setFormData((prev) => ({
       ...prev,
-      fullName: auth.user!.fullName ?? "",
-      email: auth.user!.email ?? "",
-      currentPosition: auth.user!.currentPosition ?? "",
-      targetPosition: auth.user!.targetPosition ?? "",
-      linkedin: auth.user!.linkedin ?? "",
+      fullName: user.fullName ?? "",
+      email: user.email ?? "",
+      currentPosition: user.currentPosition ?? "",
+      targetPosition: user.targetPosition ?? "",
+      linkedin: user.linkedin ?? "",
     }));
-  }, [auth?.user, setFormData]);
+  }, [user, setFormData]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,8 +47,8 @@ export default function Settings() {
         targetPosition: formData.targetPosition,
         linkedin: formData.linkedin,
       });
-      // Keep the context in sync so the Navbar reflects the new name immediately.
-      auth?.setUser(response.user);
+      // Keep the store in sync so the Navbar reflects the new name immediately.
+      setUser(response.user);
       showMessage("Profile saved successfully!");
     } catch (error) {
       console.error("Error saving profile:", error);

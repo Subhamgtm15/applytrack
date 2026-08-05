@@ -1,11 +1,11 @@
-import { useEffect, useRef, useContext } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { establishSession, fetchCurrentUser } from "../../services/api";
-import { AuthContext } from "../../context/AuthContext";
+import { useAuthStore } from "../../store/authStore";
 
 export default function AuthCallback() {
   const navigate = useNavigate();
-  const auth = useContext(AuthContext);
+  const setUser = useAuthStore((s) => s.setUser);
   const ran = useRef(false);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function AuthCallback() {
       try {
         await establishSession(token);
         const userResponse = await fetchCurrentUser();
-        auth?.setUser(userResponse.user);
+        setUser(userResponse.user);
         navigate("/", { replace: true });
       } catch {
         navigate("/login", { replace: true });
@@ -34,7 +34,7 @@ export default function AuthCallback() {
     };
 
     run();
-  }, [auth, navigate]);
+  }, [setUser, navigate]);
 
   return (
     <div className="min-h-[100dvh] flex items-center justify-center bg-slate-50 dark:bg-slate-900">
