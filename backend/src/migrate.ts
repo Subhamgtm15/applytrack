@@ -1,6 +1,5 @@
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 import { pool } from "./db";
 
 // A tiny, dependency-free migration runner.
@@ -10,7 +9,6 @@ import { pool } from "./db";
 // run twice. To add a migration, just drop a new .sql file in that folder and
 // run `npm run migrate`.
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const migrationsDir = path.join(__dirname, "..", "migrations");
 
 async function runMigrations() {

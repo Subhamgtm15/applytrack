@@ -1,4 +1,4 @@
-# Render Blueprint for the ApplyTrack backend (Express + Node).
+# Render Blueprint for the ApplyTrack backend (NestJS + Node).
 # Deploy: New > Blueprint, point Render at this repo. Set secret env vars in the dashboard.
 services:
   - type: web
@@ -6,7 +6,8 @@ services:
     runtime: node
     plan: free
     rootDir: backend
-    buildCommand: npm install
+    # Install dev deps (Nest CLI + TypeScript) so the build can compile to dist/.
+    buildCommand: npm install --include=dev && npm run build
     startCommand: npm start
     healthCheckPath: /
     envVars:
