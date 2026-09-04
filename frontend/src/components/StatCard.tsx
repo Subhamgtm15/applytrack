@@ -4,9 +4,9 @@ import type { LucideIcon } from "lucide-react";
 type StatCardProps = {
   title: string;
   value: number;
-  subtitle: ReactNode; // can be plain text or a custom node (e.g. an arrow + colored text)
+  subtitle: ReactNode; 
   icon: LucideIcon;
-    iconBg?: string; // optional prop for background color of the icon container. you see that ? mark
+    iconBg?: string; 
 };
 
 export default function StatCard({ title, value, subtitle, icon: LucideIcon, iconBg }: StatCardProps) {
