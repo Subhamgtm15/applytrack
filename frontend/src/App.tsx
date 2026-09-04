@@ -1,16 +1,19 @@
 import './index.css'
-import { useEffect } from 'react';
+import { lazy, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { MainLayout } from './layouts/MainLayout'
 import Dashboard from './pages/Dashboard'
-import Applications from './pages/Applications'
-import AddApplication from './pages/AddApplication'
-import Settings from './pages/Settings'
 import Signup from './pages/auth/Signup';
 import Login from './pages/auth/Login';
 import AuthCallback from './pages/auth/AuthCallback';
 import ProtectedRoute from './components/ProtectedRoute';
 import { useAuthStore } from './store/authStore';
+
+// Dashboard is the first authenticated page, so it stays eager. Secondary routes are
+// code-split so their JS is excluded from the initial bundle and loaded on demand.
+const Applications = lazy(() => import('./pages/Applications'));
+const AddApplication = lazy(() => import('./pages/AddApplication'));
+const Settings = lazy(() => import('./pages/Settings'));
 
 export default function AppRoutes() {
   const initAuth = useAuthStore((s) => s.initAuth);
